@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://characters/warrior/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
-[ext_resource type="Script" path="res://characters/warrior/hitbox.gd" id="4_idbym"]
+[ext_resource type="Script" path="res://characters/warrior/hitbox.gd" id="4_m8tv1"]
 
 [sub_resource type="Animation" id="Animation_1e117"]
 length = 0.001
@@ -141,14 +141,14 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
 size = Vector2(40, 16)
 
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprite", "_hitboxes")]
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprite")]
 rotation = 0.00152653
 script = ExtResource("1_dr5k8")
-_animation_player = NodePath("AnimationPlayer")
-_sprite = NodePath("Sprite2D")
-_hitboxes = [NodePath("Down Hitbox 1"), NodePath("Down Hitbox 2")]
+walk_speed = null
 dash_speed = 600
 max_dash_frames = 10
+_animation_player = NodePath("AnimationPlayer")
+_sprite = NodePath("Sprite2D")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -170,17 +170,15 @@ position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_ra4dr")
 
 [node name="Down Hitbox 1" type="Area2D" parent="."]
-collision_mask = 2
-script = ExtResource("4_idbym")
+visible = false
+script = ExtResource("4_m8tv1")
 hitbox_name = "first_attack_down"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Down Hitbox 1"]
 polygon = PackedVector2Array(68.0365, 23.8962, 68.0533, 34.8961, 61.09, 58.9068, 43.119, 77.9343, 26.1267, 82.9602, 5.12212, 79.9923, -6.88245, 77.0106, -32.9068, 61.0503, -50.9358, 42.0778, -55.9496, 33.0854, -9.98777, 8.01525)
 
 [node name="Down Hitbox 2" type="Area2D" parent="."]
-collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "second_attack_down"
+visible = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Down Hitbox 2"]
 polygon = PackedVector2Array(0, 0, 87.9999, -0.134335, 88.0243, 15.8656, 80.061, 39.8778, 40.0977, 63.9389, 10.1038, 67.9847, -19.9069, 61.0305, -40.9404, 39.0625, -52.974, 17.0809, -55.9999, 0.0854857)

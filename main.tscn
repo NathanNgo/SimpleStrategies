@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://dd6bgy26oeywt"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_irdcu"]
+[ext_resource type="PackedScene" uid="uid://qlh2106qwps4" path="res://world/world.tscn" id="1_s18nu"]
+[ext_resource type="PackedScene" uid="uid://cbn6xc5n0whkk" path="res://characters/goblin/goblin.tscn" id="2_fu5pn"]
+[ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://characters/warrior/warrior.tscn" id="3_kwcea"]
+
+[node name="Main" type="Node2D" node_paths=PackedStringArray("player", "world", "timer")]
+y_sort_enabled = true
+script = ExtResource("1_irdcu")
+goblin_scene = ExtResource("2_fu5pn")
+player = NodePath("Warrior")
+world = NodePath("World")
+timer = NodePath("Goblin Spawn Timer")
+
+[node name="World" parent="." instance=ExtResource("1_s18nu")]
+
+[node name="Warrior" parent="." instance=ExtResource("3_kwcea")]
+position = Vector2(395, 365)
+dash_speed = 400
+max_dash_frames = 3
+
+[node name="Goblin Spawn Timer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
