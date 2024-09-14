@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dd6bgy26oeywt"]
+
+[ext_resource type="PackedScene" uid="uid://qlh2106qwps4" path="res://source/levels/level_basic/level_basic_map/map.tscn" id="1_s18nu"]
+[ext_resource type="Script" path="res://source/levels/level_basic/level_basic.gd" id="1_wxvxo"]
+[ext_resource type="PackedScene" uid="uid://cbn6xc5n0whkk" path="res://source/characters/goblin/goblin.tscn" id="2_fu5pn"]
+[ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="3_kwcea"]
+
+[node name="LevelBasic" type="Node2D" node_paths=PackedStringArray("_player", "_spawn_point", "_timer")]
+y_sort_enabled = true
+script = ExtResource("1_wxvxo")
+_goblin_scene = ExtResource("2_fu5pn")
+_player = NodePath("Warrior")
+_spawn_point = NodePath("SpawnPoint")
+_timer = NodePath("GoblinSpawnTimer")
+
+[node name="Map" parent="." instance=ExtResource("1_s18nu")]
+
+[node name="Warrior" parent="." instance=ExtResource("3_kwcea")]
+position = Vector2(447, 373)
+
+[node name="GoblinSpawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="SpawnPoint" type="Node2D" parent="."]
+position = Vector2(352, 704)

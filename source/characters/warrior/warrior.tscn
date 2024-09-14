@@ -1,0 +1,282 @@
+[gd_scene load_steps=14 format=3 uid="uid://cwowgatou4rs2"]
+
+[ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
+[ext_resource type="Script" path="res://source/characters/warrior/animation_player.gd" id="2_pf2e4"]
+[ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
+[ext_resource type="Script" path="res://source/characters/warrior/hitbox.gd" id="4_idbym"]
+[ext_resource type="Script" path="res://source/characters/warrior/hitboxes.gd" id="4_qw0i4"]
+
+[sub_resource type="Animation" id="Animation_1e117"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_eynq6"]
+resource_name = "attack_down"
+length = 1.20001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": ["first_attack_down"],
+"method": &"attack"
+}, {
+"args": ["first_attack_down"],
+"method": &"attack"
+}, {
+"args": ["second_attack_down"],
+"method": &"attack"
+}, {
+"args": ["second_attack_down"],
+"method": &"attack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_3umit"]
+resource_name = "attack_forward"
+length = 1.20001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": ["first_attack_forward"],
+"method": &"attack"
+}, {
+"args": ["first_attack_forward"],
+"method": &"attack"
+}, {
+"args": ["second_attack_forward"],
+"method": &"attack"
+}, {
+"args": ["second_attack_forward"],
+"method": &"attack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_ys168"]
+resource_name = "attack_up"
+length = 1.20001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": ["first_attack_up"],
+"method": &"attack"
+}, {
+"args": ["first_attack_up"],
+"method": &"attack"
+}, {
+"args": ["second_attack_up"],
+"method": &"attack"
+}, {
+"args": ["second_attack_up"],
+"method": &"attack"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_d3sbp"]
+resource_name = "idle"
+length = 0.6
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_iaroc"]
+resource_name = "walk"
+length = 0.60001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [6, 7, 8, 9, 10, 11]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vvc2y"]
+_data = {
+"RESET": SubResource("Animation_1e117"),
+"attack_down": SubResource("Animation_eynq6"),
+"attack_forward": SubResource("Animation_3umit"),
+"attack_up": SubResource("Animation_ys168"),
+"idle": SubResource("Animation_d3sbp"),
+"walk": SubResource("Animation_iaroc")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
+size = Vector2(40, 16)
+
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprite", "_hitboxes", "_camera")]
+rotation = 0.00152653
+script = ExtResource("1_dr5k8")
+_animation_player = NodePath("AnimationPlayer")
+_sprite = NodePath("Sprite2D")
+_hitboxes = NodePath("Hitboxes")
+_camera = NodePath("Camera2D")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_vvc2y")
+}
+script = ExtResource("2_pf2e4")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+rotation = -0.00152653
+texture = ExtResource("2_uhed5")
+hframes = 6
+vframes = 8
+
+[node name="BodyHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 32)
+shape = SubResource("RectangleShape2D_ra4dr")
+
+[node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
+visible = false
+position = Vector2(0, 32)
+script = ExtResource("4_qw0i4")
+hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2")]
+
+[node name="DownHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "first_attack_down"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/DownHitbox1"]
+polygon = PackedVector2Array(68.0365, 23.8962, 68.0533, 34.8961, 61.09, 58.9068, 43.119, 77.9343, 26.1267, 82.9602, 5.12212, 79.9923, -6.88245, 77.0106, -32.9068, 61.0503, -50.9358, 42.0778, -55.9496, 33.0854, -16.9694, 20.0259)
+
+[node name="DownHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "second_attack_down"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/DownHitbox2"]
+polygon = PackedVector2Array(5.03663, 23.9923, 90.0182, 11.8626, 88.0243, 15.8656, 80.061, 39.8778, 40.0977, 63.9389, 10.1038, 67.9847, -19.9069, 61.0305, -40.9404, 39.0625, -52.974, 17.0809, -54.9938, 4.08395)
+
+[node name="ForwardHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "first_attack_forward"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/ForwardHitbox1"]
+polygon = PackedVector2Array(15.0443, 28.9771, 77.0808, 52.8824, 87.0243, 15.8672, 86.9846, -10.1328, 69.9251, -49.1068, 47.9007, -65.0732, 24.8916, -71.0381, 18.9542, -30.029, 16, -0.0244245)
+
+[node name="ForwardHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "second_attack_forward"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/ForwardHitbox2"]
+polygon = PackedVector2Array(-27.9389, 40.0427, -27.9252, 49.0427, -27.8992, 66.0427, 4.10075, 65.9938, 29.0916, 59.9557, 64.0457, 29.9023, 75.0167, 10.8855, 84.9892, -7.12975, 84.9587, -27.1297, 83.9389, -40.1282, 48.9725, -18.0748, 20.003, 1.96947, 5.02595, 16.9923)
+
+[node name="UpHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "first_attack_up"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox1"]
+polygon = PackedVector2Array(41.9984, -1.06411, 63.9831, -11.0977, 72.9663, -22.1114, 42.919, -53.0656, 19.9038, -63.0304, -6.10379, -67.9907, -22.1007, -65.9663, -46.0778, -50.9297, -61.0411, -26.9068, -69.0045, -2.89466, 0.0351102, 23)
+
+[node name="UpHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
+position = Vector2(0, -32)
+collision_mask = 3
+script = ExtResource("4_idbym")
+hitbox_name = "second_attack_up"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox2"]
+polygon = PackedVector2Array(-51.0198, -12.9221, -90.0381, -24.8626, -85.0518, -33.8702, -70.0732, -47.8931, -55.087, -56.916, -29.0931, -60.9557, -8.09158, -59.9877, 12.916, -55.0198, 34.9328, -44.0534, 46.948, -34.0717, 73.0014, 0.888562, 19.0137, 8.97099, 0.0351102, 23)
