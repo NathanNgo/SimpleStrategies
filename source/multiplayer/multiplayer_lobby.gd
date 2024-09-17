@@ -1,14 +1,13 @@
 extends Node
 
 
-const PORT = 9123
+signal player_connected(peer_id: int)
+
+
+const PORT = 9999
 const MAX_CONNECTIONS = 30
 
 var local_id: int
-
-
-func _ready() -> void:
-	multiplayer.peer_connected.connect(_on_peer_connected)
 
 
 func create_server() -> void:
@@ -20,11 +19,18 @@ func create_server() -> void:
 		return
 
 	local_id = peer.get_unique_id()
-	print("The host ID is %d" % local_id)
+
 	multiplayer.multiplayer_peer = peer
+	multiplayer.peer_connected.connect(_on_peer_connected)
+
+	player_connected.emit(local_id)
+
+	upnp_setup()
 
 
 func join_server(address: String = "localhost"):
+	print("[Info] Attempting to join: %s" % address)
+
 	var peer := ENetMultiplayerPeer.new()
 	var error := peer.create_client(address, PORT)
 
@@ -33,15 +39,32 @@ func join_server(address: String = "localhost"):
 		return error
 
 	local_id = peer.get_unique_id()
-	print("The client ID is %d" % local_id)
-	print("The client joined %s" % address)
 	multiplayer.multiplayer_peer = peer
 
 
-@rpc("any_peer", "call_remote", "reliable")
-func print_on_peer(message: String) -> void:
-	print(message)
+func _on_peer_connected(peer_id: int) -> void:
+	print("[Info] Peer joined as: %d" % peer_id)
+	player_connected.emit(peer_id)
 
 
-func _on_peer_connected(peer_id: int):
-	print_on_peer.rpc_id(peer_id, "Connection from %d to %d" % [local_id, peer_id])
+func upnp_setup():
+	var upnp = UPNP.new()
+	
+	var discover_result = upnp.discover()
+	assert(
+		discover_result == UPNP.UPNP_RESULT_SUCCESS,
+		"[Error] UPNP Discovery Failed: %s" % discover_result
+	)
+
+	assert(
+		upnp.get_gateway() and upnp.get_gateway().is_valid_gateway(),
+		"[Error] UPNP Invalid Gateway"
+	)
+
+	var map_result = upnp.add_port_mapping(PORT)
+	assert(
+		map_result == UPNP.UPNP_RESULT_SUCCESS,
+		"[Error] UPNP Port Mapping Failed: %s" % map_result
+	)
+	
+	print("[Info] UPNP Succeeded: %s" % upnp.query_external_address())

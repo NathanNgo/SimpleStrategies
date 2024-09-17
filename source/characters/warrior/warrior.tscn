@@ -1,23 +1,38 @@
-[gd_scene load_steps=14 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=20 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/warrior/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
+[ext_resource type="Script" path="res://source/characters/warrior/sprites.gd" id="3_7sr5d"]
+[ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
 [ext_resource type="Script" path="res://source/characters/warrior/hitbox.gd" id="4_idbym"]
 [ext_resource type="Script" path="res://source/characters/warrior/hitboxes.gd" id="4_qw0i4"]
+[ext_resource type="Script" path="res://source/characters/warrior/input_synchronizer.gd" id="8_cajsj"]
 
 [sub_resource type="Animation" id="Animation_1e117"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/DeathSprites:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
 "values": [0]
 }
 
@@ -28,7 +43,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -68,7 +83,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -108,7 +123,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -141,6 +156,23 @@ tracks/1/keys = {
 }]
 }
 
+[sub_resource type="Animation" id="Animation_gulgl"]
+resource_name = "die"
+length = 1.40001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/DeathSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+}
+
 [sub_resource type="Animation" id="Animation_d3sbp"]
 resource_name = "idle"
 length = 0.6
@@ -148,7 +180,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -165,7 +197,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprites/WarriorSprites:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -181,6 +213,7 @@ _data = {
 "attack_down": SubResource("Animation_eynq6"),
 "attack_forward": SubResource("Animation_3umit"),
 "attack_up": SubResource("Animation_ys168"),
+"die": SubResource("Animation_gulgl"),
 "idle": SubResource("Animation_d3sbp"),
 "walk": SubResource("Animation_iaroc")
 }
@@ -188,13 +221,62 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
 size = Vector2(40, 16)
 
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprite", "_hitboxes", "_camera")]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3tfan"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Hitboxes:scale")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Sprites:scale")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:player_id")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ik3sn"]
+properties/0/path = NodePath("InputSynchronizer:attack")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("InputSynchronizer:move_left")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("InputSynchronizer:move_right")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("InputSynchronizer:move_up")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("InputSynchronizer:move_down")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("InputSynchronizer:dash")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("InputSynchronizer:direction")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_hitboxes", "_camera", "_label", "_input_synchronizer")]
 rotation = 0.00152653
+collision_layer = 3
 script = ExtResource("1_dr5k8")
 _animation_player = NodePath("AnimationPlayer")
-_sprite = NodePath("Sprite2D")
+_sprites = NodePath("Sprites")
+_death_sprites = NodePath("Sprites/DeathSprites")
+_warrior_sprites = NodePath("Sprites/WarriorSprites")
 _hitboxes = NodePath("Hitboxes")
 _camera = NodePath("Camera2D")
+_label = NodePath("Label")
+_input_synchronizer = NodePath("InputSynchronizer")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -61.0
+offset_top = -76.0
+offset_right = 64.0
+offset_bottom = 23.0
+horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -205,11 +287,21 @@ script = ExtResource("2_pf2e4")
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
+script = ExtResource("3_7sr5d")
+sprites = [NodePath("WarriorSprites"), NodePath("DeathSprites")]
+
+[node name="WarriorSprites" type="Sprite2D" parent="Sprites"]
 rotation = -0.00152653
 texture = ExtResource("2_uhed5")
 hframes = 6
 vframes = 8
+
+[node name="DeathSprites" type="Sprite2D" parent="Sprites"]
+visible = false
+texture = ExtResource("4_eh6nl")
+hframes = 7
+vframes = 2
 
 [node name="BodyHitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 32)
@@ -224,7 +316,8 @@ hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardH
 [node name="DownHitbox1" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "first_attack_down"
 
@@ -234,7 +327,8 @@ polygon = PackedVector2Array(68.0365, 23.8962, 68.0533, 34.8961, 61.09, 58.9068,
 [node name="DownHitbox2" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "second_attack_down"
 
@@ -244,7 +338,8 @@ polygon = PackedVector2Array(5.03663, 23.9923, 90.0182, 11.8626, 88.0243, 15.865
 [node name="ForwardHitbox1" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "first_attack_forward"
 
@@ -254,7 +349,8 @@ polygon = PackedVector2Array(15.0443, 28.9771, 77.0808, 52.8824, 87.0243, 15.867
 [node name="ForwardHitbox2" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "second_attack_forward"
 
@@ -264,7 +360,8 @@ polygon = PackedVector2Array(-27.9389, 40.0427, -27.9252, 49.0427, -27.8992, 66.
 [node name="UpHitbox1" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "first_attack_up"
 
@@ -274,9 +371,17 @@ polygon = PackedVector2Array(41.9984, -1.06411, 63.9831, -11.0977, 72.9663, -22.
 [node name="UpHitbox2" type="Area2D" parent="Hitboxes"]
 visible = false
 position = Vector2(0, -32)
-collision_mask = 3
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("4_idbym")
 hitbox_name = "second_attack_up"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox2"]
 polygon = PackedVector2Array(-51.0198, -12.9221, -90.0381, -24.8626, -85.0518, -33.8702, -70.0732, -47.8931, -55.087, -56.916, -29.0931, -60.9557, -8.09158, -59.9877, 12.916, -55.0198, 34.9328, -44.0534, 46.948, -34.0717, 73.0014, 0.888562, 19.0137, 8.97099, 0.0351102, 23)
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_3tfan")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_ik3sn")
+script = ExtResource("8_cajsj")

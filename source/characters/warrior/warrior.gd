@@ -4,13 +4,24 @@ signal player_moved()
 signal enemies_hit(enemies_hit: Array[Node2D])
 
 @export var _animation_player: AnimationPlayer
-@export var _sprite: Sprite2D
+@export var _sprites: Node2D
+@export var _death_sprites: Sprite2D
+@export var _warrior_sprites: Sprite2D
 @export var _hitboxes: Node2D
+@export var _camera: Camera2D
+@export var _label: Label
+@export var _input_synchronizer: MultiplayerSynchronizer
 @export var walk_speed: int = 150
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
+@export var player_id: int = 1:
+	set(new_player_id):
+		print("A peer has set its _input_synchronizer authority to %d" % new_player_id)
+		player_id = new_player_id
+		_input_synchronizer.set_multiplayer_authority(new_player_id)
 
-enum states {IDLE, WALKING, ATTACKING, DASHING}
+
+enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
 const animations = {
 	IDLE = "idle",
@@ -18,6 +29,7 @@ const animations = {
 	ATTACK_FORWARD = "attack_forward",
 	ATTACK_DOWN = "attack_down",
 	ATTACK_UP = "attack_up",
+	DIE = "die",
 }
 const input = {
 	UP = "move_up",
@@ -31,28 +43,67 @@ const SCALE_NORMAL = 1
 const SCALE_REVERSED = -1
 const AXIS_NEUTRAL = 0
 
-
 var state = states.IDLE
+var death_animation_finished = false
 var total_dash_frames = 0
 # Dict[String, Array[Node2D]]
 var hitboxes_with_killable_enemies = {}
 
 
 func _ready() -> void:
+	_death_sprites.hide()
+
 	_animation_player.animation_attack.connect(_on_attack)
+	_animation_player.animation_finished.connect(_on_animation_finished)
 
 	for hitbox in _hitboxes.hitboxes:
 		hitbox.body_entered.connect(_on_body_entered.bind(hitbox.hitbox_name))
 		hitbox.body_exited.connect(_on_body_exited.bind(hitbox.hitbox_name))
 
+	_label.text = str(name)
+
+	call_deferred("_set_authority")
+
+
+func _set_authority():
+	print(
+		"=========================================================\n" +
+		"Peer Unique ID (The peer we are on): %s \nNode Name: %s \nNode Owner: %s \nMultiplayer Authority ID: %s \nPeer Synced ID: %s \n" %
+		[
+			multiplayer.get_unique_id(),
+			str(name),
+			str(get_multiplayer_authority()),
+			_input_synchronizer.get_multiplayer_authority(),
+			str(player_id)
+		]
+	)
+	# _input_synchronizer.set_multiplayer_authority(id)
+
+	# if multiplayer.get_unique_id() == id:
+	# 	_camera.make_current()
+
+
+
+# func _set_authority():
+# 	print(
+# 		"=========================================================\n" +
+# 		"Peer Unique ID (The peer we are on): %s \nNode Name: %s \nMultiplayer Authority ID: %s \nPeer Synced ID: %s \n" %
+# 		[
+# 			multiplayer.get_unique_id(),
+# 			str(name),
+# 			_server_synchronizer.get_multiplayer_authority(),
+# 			str(id)
+# 		]
+# 	)
+
 
 func _physics_process(_delta) -> void:
 	match state:
 		states.IDLE, states.WALKING:
-			if _is_attack_action_pressed():
+			if _input_synchronizer.attack:
 				state = states.ATTACKING
-				_attack()
-			elif (_is_move_action_pressed()):
+				_attack(_get_direction_to_mouse())
+			elif _is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
@@ -60,9 +111,9 @@ func _physics_process(_delta) -> void:
 				_idle()
 
 		states.ATTACKING:
-			if _is_attack_action_pressed():
-				_attack()
-			elif (_is_move_action_pressed()):
+			if _input_synchronizer.attack:
+				_attack(_get_direction_to_mouse())
+			elif _is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
@@ -72,7 +123,7 @@ func _physics_process(_delta) -> void:
 		states.DASHING:
 			if total_dash_frames < max_dash_frames:
 				_dash()
-			elif (_is_move_action_pressed()):
+			elif _is_move_action_pressed():
 				total_dash_frames = 0
 				state = states.WALKING
 				_walk()
@@ -81,8 +132,14 @@ func _physics_process(_delta) -> void:
 				state = states.IDLE
 				_idle()
 
+		states.DEAD:
+			_die.rpc()
+
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_multiplayer_authority():
+		return
+
 	match state:
 		states.WALKING:
 			if event.is_action_pressed(input.DASH):
@@ -90,19 +147,12 @@ func _unhandled_input(event: InputEvent) -> void:
 				_dash()
 
 
-func _is_attack_action_pressed() -> bool:
-	return (
-		InputMap.has_action(input.ATTACK) and
-		Input.is_action_pressed(input.ATTACK)
-	)
-
-
 func _is_move_action_pressed() -> bool:
 	return (
-		Input.is_action_pressed(input.RIGHT) or
-		Input.is_action_pressed(input.LEFT) or
-		Input.is_action_pressed(input.UP) or
-		Input.is_action_pressed(input.DOWN)
+		_input_synchronizer.move_right or
+		_input_synchronizer.move_left or
+		_input_synchronizer.move_up or
+		_input_synchronizer.move_down
 	)
 
 
@@ -110,10 +160,12 @@ func _idle() -> void:
 	_animation_player.play(animations.IDLE)
 
 
-func _attack() -> void:
+func _get_direction_to_mouse():
 	var mouse_position = get_global_mouse_position()
-	var direction = position.direction_to(mouse_position)
+	return position.direction_to(mouse_position)
 
+
+func _attack(direction: Vector2) -> void:
 	if abs(direction.x) > abs(direction.y):
 		if direction.x > AXIS_NEUTRAL:
 			set_scale_normal(true)
@@ -140,8 +192,7 @@ func _walk() -> void:
 func _move(speed: int) -> void:
 	var direction = Vector2.ZERO
 
-	direction.x = Input.get_axis(input.LEFT, input.RIGHT)
-	direction.y = Input.get_axis(input.UP, input.DOWN)
+	direction = _input_synchronizer.direction
 
 	if direction.x > AXIS_NEUTRAL:
 		set_scale_normal(true)
@@ -155,6 +206,25 @@ func _move(speed: int) -> void:
 	move_and_slide()
 
 	player_moved.emit()
+
+
+func _die():
+	_warrior_sprites.hide()
+	_death_sprites.show()
+	_animation_player.play(animations.DIE)
+
+	if death_animation_finished:
+		queue_free()
+
+
+@rpc("call_local", "any_peer")
+func die():
+	state = states.DEAD
+
+
+func _on_animation_finished(animation_name: String) -> void:
+	if animation_name == animations.DIE:
+		death_animation_finished = true
 
 
 func _on_body_entered(body: Node2D, hitbox_name: String) -> void:
@@ -186,9 +256,8 @@ func _on_attack(hitbox_name: String) -> void:
 
 func set_scale_normal(normal=true) -> void:
 	if normal:
-		_sprite.scale.x = SCALE_NORMAL
+		_sprites.scale.x = SCALE_NORMAL
 		_hitboxes.scale.x = SCALE_NORMAL
 	else:
-		_sprite.scale.x = SCALE_REVERSED
+		_sprites.scale.x = SCALE_REVERSED
 		_hitboxes.scale.x = SCALE_REVERSED
-

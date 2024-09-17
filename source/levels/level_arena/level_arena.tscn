@@ -4,15 +4,21 @@
 [ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="3_6syl3"]
 [ext_resource type="PackedScene" uid="uid://cokb2q5ky857y" path="res://source/levels/level_arena/level_arena_map/map.tscn" id="3_xp6ot"]
 
-[node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_player")]
+[node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_players", "_player_spawn_point")]
 y_sort_enabled = true
 script = ExtResource("1_7s657")
-_player = NodePath("Warrior")
+_player_scene = ExtResource("3_6syl3")
+_players = NodePath("Players")
+_player_spawn_point = NodePath("SpawnPoint")
 
 [node name="Map" parent="." instance=ExtResource("3_xp6ot")]
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="SpawnPoint" type="Node2D" parent="."]
 position = Vector2(1088, 704)
 
-[node name="Warrior" parent="." instance=ExtResource("3_6syl3")]
-position = Vector2(1112, 688)
+[node name="Players" type="Node2D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://source/characters/warrior/warrior.tscn")
+spawn_path = NodePath("../Players")
+spawn_limit = 3

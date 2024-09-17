@@ -8,6 +8,6 @@
 script = ExtResource("1_irdcu")
 _main_menu = NodePath("MainMenu")
 
-[node name="MainMenu" parent="." instance=ExtResource("2_rbpar")]
-
 [node name="LevelArena" parent="." instance=ExtResource("3_ibo5i")]
+
+[node name="MainMenu" parent="." instance=ExtResource("2_rbpar")]
