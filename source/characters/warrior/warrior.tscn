@@ -221,19 +221,22 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
 size = Vector2(40, 16)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_3tfan"]
-properties/0/path = NodePath(".:position")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h8tdm"]
+properties/0/path = NodePath(".:player_id")
 properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Hitboxes:scale")
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 properties/2/path = NodePath("Sprites:scale")
 properties/2/spawn = true
 properties/2/replication_mode = 1
-properties/3/path = NodePath(".:player_id")
+properties/3/path = NodePath("Hitboxes:scale")
 properties/3/spawn = true
-properties/3/replication_mode = 2
+properties/3/replication_mode = 1
+properties/4/path = NodePath(".:y_sort_enabled")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ik3sn"]
 properties/0/path = NodePath("InputSynchronizer:attack")
@@ -257,8 +260,12 @@ properties/5/replication_mode = 1
 properties/6/path = NodePath("InputSynchronizer:direction")
 properties/6/spawn = true
 properties/6/replication_mode = 1
+properties/7/path = NodePath("InputSynchronizer:mouse_position")
+properties/7/spawn = true
+properties/7/replication_mode = 1
 
 [node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_hitboxes", "_camera", "_label", "_input_synchronizer")]
+y_sort_enabled = true
 rotation = 0.00152653
 collision_layer = 3
 script = ExtResource("1_dr5k8")
@@ -380,8 +387,11 @@ hitbox_name = "second_attack_up"
 polygon = PackedVector2Array(-51.0198, -12.9221, -90.0381, -24.8626, -85.0518, -33.8702, -70.0732, -47.8931, -55.087, -56.916, -29.0931, -60.9557, -8.09158, -59.9877, 12.916, -55.0198, 34.9328, -44.0534, 46.948, -34.0717, 73.0014, 0.888562, 19.0137, 8.97099, 0.0351102, 23)
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_3tfan")
+replication_config = SubResource("SceneReplicationConfig_h8tdm")
 
-[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("_mouse_position_finder")]
 replication_config = SubResource("SceneReplicationConfig_ik3sn")
 script = ExtResource("8_cajsj")
+_mouse_position_finder = NodePath("MousePositionFinder")
+
+[node name="MousePositionFinder" type="Node2D" parent="InputSynchronizer"]

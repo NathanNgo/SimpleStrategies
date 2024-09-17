@@ -1,12 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdvhtd31ds7f2"]
+[gd_scene load_steps=3 format=3 uid="uid://cdvhtd31ds7f2"]
 
-[ext_resource type="Script" path="res://source/main.gd" id="1_irdcu"]
 [ext_resource type="PackedScene" uid="uid://bfsxfr5gt2qmq" path="res://source/user_interfaces/main_menu.tscn" id="2_rbpar"]
 [ext_resource type="PackedScene" uid="uid://dqd2hxm6l3n6x" path="res://source/levels/level_arena/level_arena.tscn" id="3_ibo5i"]
 
-[node name="Main" type="Node" node_paths=PackedStringArray("_main_menu")]
-script = ExtResource("1_irdcu")
-_main_menu = NodePath("MainMenu")
+[node name="Main" type="Node"]
 
 [node name="LevelArena" parent="." instance=ExtResource("3_ibo5i")]
 

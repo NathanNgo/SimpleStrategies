@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 signal player_moved()
-signal enemies_hit(enemies_hit: Array[Node2D])
+signal player_dead(player_id: int)
+signal enemies_hit(attacker: String, enemies_hit: Array[Node2D])
 
 @export var _animation_player: AnimationPlayer
 @export var _sprites: Node2D
@@ -11,15 +12,14 @@ signal enemies_hit(enemies_hit: Array[Node2D])
 @export var _camera: Camera2D
 @export var _label: Label
 @export var _input_synchronizer: MultiplayerSynchronizer
+
 @export var walk_speed: int = 150
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
-@export var player_id: int = 1:
+@export var player_id: int:
 	set(new_player_id):
-		print("A peer has set its _input_synchronizer authority to %d" % new_player_id)
 		player_id = new_player_id
 		_input_synchronizer.set_multiplayer_authority(new_player_id)
-
 
 enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -30,14 +30,6 @@ const animations = {
 	ATTACK_DOWN = "attack_down",
 	ATTACK_UP = "attack_up",
 	DIE = "die",
-}
-const input = {
-	UP = "move_up",
-	DOWN = "move_down",
-	RIGHT = "move_right",
-	LEFT = "move_left",
-	ATTACK = "attack",
-	DASH = "dash"
 }
 const SCALE_NORMAL = 1
 const SCALE_REVERSED = -1
@@ -62,39 +54,8 @@ func _ready() -> void:
 
 	_label.text = str(name)
 
-	call_deferred("_set_authority")
-
-
-func _set_authority():
-	print(
-		"=========================================================\n" +
-		"Peer Unique ID (The peer we are on): %s \nNode Name: %s \nNode Owner: %s \nMultiplayer Authority ID: %s \nPeer Synced ID: %s \n" %
-		[
-			multiplayer.get_unique_id(),
-			str(name),
-			str(get_multiplayer_authority()),
-			_input_synchronizer.get_multiplayer_authority(),
-			str(player_id)
-		]
-	)
-	# _input_synchronizer.set_multiplayer_authority(id)
-
-	# if multiplayer.get_unique_id() == id:
-	# 	_camera.make_current()
-
-
-
-# func _set_authority():
-# 	print(
-# 		"=========================================================\n" +
-# 		"Peer Unique ID (The peer we are on): %s \nNode Name: %s \nMultiplayer Authority ID: %s \nPeer Synced ID: %s \n" %
-# 		[
-# 			multiplayer.get_unique_id(),
-# 			str(name),
-# 			_server_synchronizer.get_multiplayer_authority(),
-# 			str(id)
-# 		]
-# 	)
+	if _input_synchronizer.is_multiplayer_authority():
+		_camera.make_current()
 
 
 func _physics_process(_delta) -> void:
@@ -133,18 +94,18 @@ func _physics_process(_delta) -> void:
 				_idle()
 
 		states.DEAD:
-			_die.rpc()
+			_die()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not is_multiplayer_authority():
-		return
-
-	match state:
-		states.WALKING:
-			if event.is_action_pressed(input.DASH):
-				state = states.DASHING
-				_dash()
+# func _unhandled_input(event: InputEvent) -> void:
+# 	if not is_multiplayer_authority():
+# 		return
+# 
+# 	match state:
+# 		states.WALKING:
+# 			if event.is_action_pressed(input.DASH):
+# 				state = states.DASHING
+# 				_dash()
 
 
 func _is_move_action_pressed() -> bool:
@@ -161,7 +122,7 @@ func _idle() -> void:
 
 
 func _get_direction_to_mouse():
-	var mouse_position = get_global_mouse_position()
+	var mouse_position = _input_synchronizer.mouse_position
 	return position.direction_to(mouse_position)
 
 
@@ -215,6 +176,7 @@ func _die():
 
 	if death_animation_finished:
 		queue_free()
+		player_dead.emit(player_id)
 
 
 @rpc("call_local", "any_peer")
@@ -251,7 +213,7 @@ func _on_body_exited(body: Node2D, hitbox_name: String) -> void:
 
 func _on_attack(hitbox_name: String) -> void:
 	if hitboxes_with_killable_enemies.has(hitbox_name):
-		enemies_hit.emit(hitboxes_with_killable_enemies[hitbox_name])
+		enemies_hit.emit(str(name), hitboxes_with_killable_enemies[hitbox_name])
 
 
 func set_scale_normal(normal=true) -> void:

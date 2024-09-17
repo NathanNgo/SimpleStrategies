@@ -9,13 +9,17 @@ const input = {
 	DASH = "dash"
 }
 
+@export var _mouse_position_finder: Node2D
+
 @export var attack: bool = false
 @export var move_left: bool = false
 @export var move_right: bool = false
 @export var move_up: bool = false
 @export var move_down: bool = false
 @export var dash: bool = false
+
 @export var direction: Vector2 = Vector2(0, 0)
+@export var mouse_position: Vector2 = Vector2(0, 0)
 
 
 func _ready() -> void:
@@ -32,6 +36,8 @@ func _process(_delta: float) -> void:
 		Input.get_axis(input.LEFT, input.RIGHT),
 		Input.get_axis(input.UP, input.DOWN)
 	)
+	
+	mouse_position = _mouse_position_finder.get_global_mouse_position()
 
 	attack = InputMap.has_action(input.ATTACK) and Input.is_action_pressed(input.ATTACK)
 	

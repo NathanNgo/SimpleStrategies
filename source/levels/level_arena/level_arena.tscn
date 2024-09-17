@@ -12,11 +12,13 @@ _players = NodePath("Players")
 _player_spawn_point = NodePath("SpawnPoint")
 
 [node name="Map" parent="." instance=ExtResource("3_xp6ot")]
+metadata/_edit_lock_ = true
 
 [node name="SpawnPoint" type="Node2D" parent="."]
 position = Vector2(1088, 704)
 
 [node name="Players" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://source/characters/warrior/warrior.tscn")
