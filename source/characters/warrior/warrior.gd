@@ -60,10 +60,24 @@ func _ready() -> void:
 
 func _physics_process(_delta) -> void:
 	match state:
-		states.IDLE, states.WALKING:
+		states.IDLE:
 			if _input_synchronizer.attack:
 				state = states.ATTACKING
 				_attack(_get_direction_to_mouse())
+			elif _is_move_action_pressed():
+				state = states.WALKING
+				_walk()
+			else:
+				state = states.IDLE
+				_idle()
+
+		states.WALKING:
+			if _input_synchronizer.attack:
+				state = states.ATTACKING
+				_attack(_get_direction_to_mouse())
+			elif _input_synchronizer.dash:
+				state = states.DASHING
+				_dash()
 			elif _is_move_action_pressed():
 				state = states.WALKING
 				_walk()
@@ -95,17 +109,6 @@ func _physics_process(_delta) -> void:
 
 		states.DEAD:
 			_die()
-
-
-# func _unhandled_input(event: InputEvent) -> void:
-# 	if not is_multiplayer_authority():
-# 		return
-# 
-# 	match state:
-# 		states.WALKING:
-# 			if event.is_action_pressed(input.DASH):
-# 				state = states.DASHING
-# 				_dash()
 
 
 func _is_move_action_pressed() -> bool:

@@ -15,7 +15,6 @@ func _on_enemies_hit(attacker: String, enemies_hit: Array[Node2D]) -> void:
 		enemy.die.rpc()
 
 
-
 func _on_player_dead(player_id: int):
 	spawn_player(player_id)
 

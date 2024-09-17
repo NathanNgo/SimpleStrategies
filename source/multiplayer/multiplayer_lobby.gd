@@ -10,13 +10,13 @@ const MAX_CONNECTIONS = 30
 var local_id: int
 
 
-func create_server() -> void:
+func create_server():
 	var peer := ENetMultiplayerPeer.new()
 	var error := peer.create_server(PORT, MAX_CONNECTIONS)
 
 	if error:
 		print(error)
-		return
+		return error
 
 	local_id = peer.get_unique_id()
 
@@ -29,6 +29,8 @@ func create_server() -> void:
 
 
 func join_server(address: String = "localhost"):
+	# You'd think the default argument value would do it. It doesn't.
+	address = address if address else "localhost"
 	print("[Info] Attempting to join: %s" % address)
 
 	var peer := ENetMultiplayerPeer.new()

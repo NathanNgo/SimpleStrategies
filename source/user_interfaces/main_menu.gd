@@ -29,7 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_close_menu()
 
 
-func _open_menu():
+func _open_menu() -> void:
 	menu_open = true
 
 	for action in actions_to_erase:
@@ -38,22 +38,26 @@ func _open_menu():
 	show()
 
 
-func _close_menu():
+func _close_menu() -> void:
 	menu_open = false
 	InputMap.load_from_project_settings()
 	hide()
 
 
-func _on_resume_button_pressed():
+func _on_resume_button_pressed() -> void:
 	_close_menu()
 
 
-func _on_join_button_pressed():
+func _on_join_button_pressed() -> void:
 	var address := _address_input.text
-	MultiplayerLobby.join_server(address)
-	_close_menu()
+	var return_code = MultiplayerLobby.join_server(address)
+
+	if not return_code:
+		_close_menu()
 
 
-func _on_host_button_pressed():
-	MultiplayerLobby.create_server()
-	_close_menu()
+func _on_host_button_pressed() -> void:
+	var return_code = MultiplayerLobby.create_server()
+
+	if not return_code:
+		_close_menu()

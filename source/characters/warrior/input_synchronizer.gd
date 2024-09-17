@@ -27,7 +27,7 @@ func _ready() -> void:
 	set_process(enabled)
 
 
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	move_right = Input.is_action_pressed(input.RIGHT)
 	move_left = Input.is_action_pressed(input.LEFT)
 	move_up = Input.is_action_pressed(input.UP)
