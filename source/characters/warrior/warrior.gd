@@ -160,7 +160,7 @@ func _move(speed: int) -> void:
 
 	if direction.x > AXIS_NEUTRAL:
 		set_scale_normal(true)
-	else:
+	elif direction.x < AXIS_NEUTRAL:
 		set_scale_normal(false)
 
 	_animation_player.play(animations.WALK)
