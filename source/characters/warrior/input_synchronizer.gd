@@ -23,8 +23,8 @@ const input = {
 
 
 func _ready() -> void:
-	var enabled = get_multiplayer_authority() == multiplayer.get_unique_id()
-	set_process(enabled)
+	var is_enabled = get_multiplayer_authority() == multiplayer.get_unique_id()
+	set_physics_process(is_enabled)
 
 
 func _physics_process(_delta: float) -> void:

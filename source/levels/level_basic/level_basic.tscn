@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dd6bgy26oeywt"]
 
-[ext_resource type="PackedScene" uid="uid://qlh2106qwps4" path="res://source/levels/level_basic/level_basic_map/map.tscn" id="1_s18nu"]
+[ext_resource type="PackedScene" uid="uid://qlh2106qwps4" path="res://source/levels/level_basic/map/map.tscn" id="1_s18nu"]
 [ext_resource type="Script" path="res://source/levels/level_basic/level_basic.gd" id="1_wxvxo"]
 [ext_resource type="PackedScene" uid="uid://cbn6xc5n0whkk" path="res://source/characters/goblin/goblin.tscn" id="2_fu5pn"]
 [ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="3_kwcea"]

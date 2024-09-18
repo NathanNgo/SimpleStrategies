@@ -9,9 +9,8 @@ func _ready() -> void:
 	MultiplayerLobby.player_connected.connect(_on_player_connected)
 
 
-func _on_enemies_hit(attacker: String, enemies_hit: Array[Node2D]) -> void:
+func _on_enemies_hit(_attacker: String, enemies_hit: Array[Node2D]) -> void:
 	for enemy in enemies_hit:
-		print("[Info] %s Attacked %s" % [attacker, enemy.name])
 		enemy.die.rpc()
 
 
