@@ -1,63 +1,64 @@
-extends CanvasLayer
+extends MenuItem
 
 const escape_action = "escape"
 const actions_to_erase = ["attack"]
 
-@export var _address_input: LineEdit
-@export var _join_button: Button
-@export var _host_button: Button
-@export var _resume_button: Button
+@export var _menus: Array[Control]
 
-@onready var menu_open := visible
+@onready var _menu_open := true
+
+var _active_menu: Control
+
 
 func _ready() -> void:
-	_join_button.pressed.connect(_on_join_button_pressed)
-	_host_button.pressed.connect(_on_host_button_pressed)
-	_resume_button.pressed.connect(_on_resume_button_pressed)
+	_active_menu = get_menu(menus.TITLE_SCREEN_MENU, _menus)
 
-	if menu_open:
-		_open_menu()
-	else:
-		_close_menu()
+	_close_menu()
+	_open_menu()
+
+	for menu in _menus:
+		menu.close_menu.connect(_on_close_menu)
+		menu.transition_menu.connect(_on_transition_menu)
 
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(escape_action):
-		if not menu_open:
+		if not _menu_open:
 			_open_menu()
 		else:
 			_close_menu()
 
 
 func _open_menu() -> void:
-	menu_open = true
+	_menu_open = true
 
 	for action in actions_to_erase:
 		InputMap.erase_action(action)
 
 	show()
+	_active_menu.show()
 
 
 func _close_menu() -> void:
-	menu_open = false
+	_menu_open = false
+
 	InputMap.load_from_project_settings()
+	_active_menu = get_menu(menus.TITLE_SCREEN_MENU, _menus)
+
 	hide()
+	_hide_all()
+	
+
+func _hide_all():
+	for menu in _menus:
+		menu.hide()
 
 
-func _on_resume_button_pressed() -> void:
+func _on_close_menu():
 	_close_menu()
 
 
-func _on_join_button_pressed() -> void:
-	var address := _address_input.text
-	var return_code = MultiplayerLobby.join_server(address)
-
-	if not return_code:
-		_close_menu()
-
-
-func _on_host_button_pressed() -> void:
-	var return_code = MultiplayerLobby.create_server()
-
-	if not return_code:
-		_close_menu()
+func _on_transition_menu(new_menu: String) -> void:
+	_active_menu.hide()
+	_active_menu = get_menu(new_menu, _menus)
+	_active_menu.show()
