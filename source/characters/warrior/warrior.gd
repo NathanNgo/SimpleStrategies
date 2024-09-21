@@ -1,8 +1,7 @@
-extends CharacterBody2D
+extends PlayerBody2D
 
-signal player_moved()
-signal player_dead(player_id: int)
-signal enemies_hit(attacker: String, enemies_hit: Array[Node2D])
+signal player_bodies_hit(attacker: String, player_bodies: Array[PlayerBody2D])
+signal player_body_dead
 
 @export var _animation_player: AnimationPlayer
 @export var _sprites: Node2D
@@ -10,16 +9,10 @@ signal enemies_hit(attacker: String, enemies_hit: Array[Node2D])
 @export var _warrior_sprites: Sprite2D
 @export var _hitboxes: Node2D
 @export var _camera: Camera2D
-@export var _label: Label
-@export var _input_synchronizer: MultiplayerSynchronizer
 
 @export var walk_speed: int = 150
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
-@export var player_id: int:
-	set(new_player_id):
-		player_id = new_player_id
-		_input_synchronizer.set_multiplayer_authority(new_player_id)
 
 enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -31,9 +24,6 @@ const animations = {
 	ATTACK_UP = "attack_up",
 	DIE = "die",
 }
-const SCALE_NORMAL = 1
-const SCALE_REVERSED = -1
-const AXIS_NEUTRAL = 0
 
 var state = states.IDLE
 var death_animation_finished = false
@@ -41,6 +31,14 @@ var total_dash_frames = 0
 # Dict[String, Array[Node2D]]
 var hitboxes_with_killable_enemies = {}
 
+
+func setup(
+	_input_synchronizer_: MultiplayerSynchronizer,
+	position_: Vector2,
+):
+	self._input_synchronizer = _input_synchronizer_
+	self.position = position_
+	
 
 func _ready() -> void:
 	_death_sprites.hide()
@@ -51,8 +49,6 @@ func _ready() -> void:
 	for hitbox in _hitboxes.hitboxes:
 		hitbox.body_entered.connect(_on_body_entered.bind(hitbox.hitbox_name))
 		hitbox.body_exited.connect(_on_body_exited.bind(hitbox.hitbox_name))
-
-	_label.text = str(name)
 
 	if _input_synchronizer.is_multiplayer_authority():
 		_camera.make_current()
@@ -154,22 +150,8 @@ func _walk() -> void:
 
 
 func _move(speed: int) -> void:
-	var direction = Vector2.ZERO
-
-	direction = _input_synchronizer.direction
-
-	if direction.x > AXIS_NEUTRAL:
-		set_scale_normal(true)
-	elif direction.x < AXIS_NEUTRAL:
-		set_scale_normal(false)
-
 	_animation_player.play(animations.WALK)
-
-	direction = direction.normalized()
-	velocity = direction * speed
-	move_and_slide()
-
-	player_moved.emit()
+	_move_player(speed, set_scale_normal)
 
 
 func _die():
@@ -178,11 +160,10 @@ func _die():
 	_animation_player.play(animations.DIE)
 
 	if death_animation_finished:
-		queue_free()
-		player_dead.emit(player_id)
+		player_body_dead.emit()
 
 
-@rpc("call_local", "any_peer")
+@rpc("any_peer", "call_local")
 func die():
 	state = states.DEAD
 
@@ -216,11 +197,11 @@ func _on_body_exited(body: Node2D, hitbox_name: String) -> void:
 
 func _on_attack(hitbox_name: String) -> void:
 	if hitboxes_with_killable_enemies.has(hitbox_name):
-		enemies_hit.emit(str(name), hitboxes_with_killable_enemies[hitbox_name])
+		player_bodies_hit.emit(str(name), hitboxes_with_killable_enemies[hitbox_name])
 
 
-func set_scale_normal(normal=true) -> void:
-	if normal:
+func set_scale_normal(is_normal=true) -> void:
+	if is_normal:
 		_sprites.scale.x = SCALE_NORMAL
 		_hitboxes.scale.x = SCALE_NORMAL
 	else:

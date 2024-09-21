@@ -1,0 +1,51 @@
+[gd_scene load_steps=6 format=3 uid="uid://th5a5353c0q0"]
+
+[ext_resource type="Script" path="res://source/player/player.gd" id="1_6x0rl"]
+[ext_resource type="Script" path="res://source/characters/warrior/input_synchronizer.gd" id="2_8rd8m"]
+[ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="2_m5ir0"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7qgli"]
+properties/0/path = NodePath(".:player_id")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
+properties/0/path = NodePath("InputSynchronizer:attack")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("InputSynchronizer:move_left")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("InputSynchronizer:move_right")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("InputSynchronizer:move_up")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("InputSynchronizer:move_down")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath("InputSynchronizer:dash")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath("InputSynchronizer:direction")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath("InputSynchronizer:mouse_position")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+
+[node name="Player" type="Node2D" node_paths=PackedStringArray("_input_synchronizer")]
+script = ExtResource("1_6x0rl")
+_warrior_scene = ExtResource("2_m5ir0")
+_input_synchronizer = NodePath("InputSynchronizer")
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_7qgli")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("_mouse_position_finder")]
+replication_config = SubResource("SceneReplicationConfig_w3k14")
+script = ExtResource("2_8rd8m")
+_mouse_position_finder = NodePath("MousePositionFinder")
+
+[node name="MousePositionFinder" type="Node2D" parent="InputSynchronizer"]

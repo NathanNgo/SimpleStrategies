@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://dqd2hxm6l3n6x"]
 
 [ext_resource type="Script" path="res://source/levels/level_arena/level_arena.gd" id="1_7s657"]
-[ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="3_6syl3"]
+[ext_resource type="PackedScene" uid="uid://th5a5353c0q0" path="res://source/player/player.tscn" id="2_ugal2"]
 [ext_resource type="PackedScene" uid="uid://cokb2q5ky857y" path="res://source/levels/level_arena/map/map.tscn" id="3_xp6ot"]
 
 [node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_players", "_player_spawn_point")]
 y_sort_enabled = true
 script = ExtResource("1_7s657")
-_player_scene = ExtResource("3_6syl3")
+_player_scene = ExtResource("2_ugal2")
 _players = NodePath("Players")
 _player_spawn_point = NodePath("SpawnPoint1")
 

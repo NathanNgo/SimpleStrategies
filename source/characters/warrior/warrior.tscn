@@ -264,7 +264,7 @@ properties/7/path = NodePath("InputSynchronizer:mouse_position")
 properties/7/spawn = true
 properties/7/replication_mode = 1
 
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_hitboxes", "_camera", "_label", "_input_synchronizer")]
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_hitboxes", "_camera")]
 y_sort_enabled = true
 rotation = 0.00152653
 collision_layer = 3
@@ -275,8 +275,6 @@ _death_sprites = NodePath("Sprites/DeathSprites")
 _warrior_sprites = NodePath("Sprites/WarriorSprites")
 _hitboxes = NodePath("Hitboxes")
 _camera = NodePath("Camera2D")
-_label = NodePath("Label")
-_input_synchronizer = NodePath("InputSynchronizer")
 
 [node name="Label" type="Label" parent="."]
 offset_left = -61.0
