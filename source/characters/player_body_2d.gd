@@ -11,6 +11,7 @@ signal create_projectile(projectile: Node2D)
 
 
 @export var _input_synchronizer: MultiplayerSynchronizer
+@export var walk_speed: int = 150
 
 const SCALE_NORMAL := 1
 const SCALE_REVERSED := -1

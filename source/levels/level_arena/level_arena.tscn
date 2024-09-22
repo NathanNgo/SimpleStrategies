@@ -12,13 +12,13 @@ _players = NodePath("Players")
 _player_spawn_point = NodePath("SpawnPoint1")
 
 [node name="Map" parent="." instance=ExtResource("3_xp6ot")]
-metadata/_edit_lock_ = true
+position = Vector2(2432, 2304)
 
 [node name="SpawnPoint1" type="Node2D" parent="."]
-position = Vector2(448, 256)
+position = Vector2(2880, 2496)
 
 [node name="SpawnPoint2" type="Node2D" parent="."]
-position = Vector2(1664, 256)
+position = Vector2(4096, 2496)
 
 [node name="Players" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -27,3 +27,6 @@ y_sort_enabled = true
 _spawnable_scenes = PackedStringArray("res://source/player/player.tscn")
 spawn_path = NodePath("../Players")
 spawn_limit = 6
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(3488, 2880)

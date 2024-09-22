@@ -39,7 +39,6 @@ func _ready() -> void:
 	_spawn_player_body()
 
 	if _input_synchronizer.is_multiplayer_authority():
-		print(_input_synchronizer.get_multiplayer_authority())
 		_camera.make_current()
 
 

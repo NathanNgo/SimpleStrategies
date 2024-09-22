@@ -6,7 +6,6 @@ extends PlayerBody2D
 @export var _warrior_sprites: Sprite2D
 
 @export var hitboxes_container: Node2D = null
-@export var walk_speed: int = 150
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
 
@@ -161,8 +160,6 @@ func _on_animation_finished(animation_name: String) -> void:
 
 
 func _on_body_entered(body: Node2D, hitbox_name: StringName) -> void:
-	print(body)
-	print(hitbox_name)
 	body_entered.emit(body, hitbox_name)
 
 
