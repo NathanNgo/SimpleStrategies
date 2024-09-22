@@ -1,11 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=19 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/warrior/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
 [ext_resource type="Script" path="res://source/characters/warrior/sprites.gd" id="3_7sr5d"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
-[ext_resource type="Script" path="res://source/characters/warrior/hitbox.gd" id="4_idbym"]
 [ext_resource type="Script" path="res://source/characters/warrior/hitboxes.gd" id="4_qw0i4"]
 [ext_resource type="Script" path="res://source/characters/warrior/input_synchronizer.gd" id="8_cajsj"]
 
@@ -323,8 +322,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "first_attack_down"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/DownHitbox1"]
 polygon = PackedVector2Array(68.0365, 23.8962, 68.0533, 34.8961, 61.09, 58.9068, 43.119, 77.9343, 26.1267, 82.9602, 5.12212, 79.9923, -6.88245, 77.0106, -32.9068, 61.0503, -50.9358, 42.0778, -55.9496, 33.0854, -16.9694, 20.0259)
@@ -334,8 +331,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "second_attack_down"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/DownHitbox2"]
 polygon = PackedVector2Array(5.03663, 23.9923, 90.0182, 11.8626, 88.0243, 15.8656, 80.061, 39.8778, 40.0977, 63.9389, 10.1038, 67.9847, -19.9069, 61.0305, -40.9404, 39.0625, -52.974, 17.0809, -54.9938, 4.08395)
@@ -345,8 +340,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "first_attack_forward"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/ForwardHitbox1"]
 polygon = PackedVector2Array(15.0443, 28.9771, 77.0808, 52.8824, 87.0243, 15.8672, 86.9846, -10.1328, 69.9251, -49.1068, 47.9007, -65.0732, 24.8916, -71.0381, 18.9542, -30.029, 16, -0.0244245)
@@ -356,8 +349,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "second_attack_forward"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/ForwardHitbox2"]
 polygon = PackedVector2Array(-27.9389, 40.0427, -27.9252, 49.0427, -27.8992, 66.0427, 4.10075, 65.9938, 29.0916, 59.9557, 64.0457, 29.9023, 75.0167, 10.8855, 84.9892, -7.12975, 84.9587, -27.1297, 83.9389, -40.1282, 48.9725, -18.0748, 20.003, 1.96947, 5.02595, 16.9923)
@@ -367,8 +358,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "first_attack_up"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox1"]
 polygon = PackedVector2Array(41.9984, -1.06411, 63.9831, -11.0977, 72.9663, -22.1114, 42.919, -53.0656, 19.9038, -63.0304, -6.10379, -67.9907, -22.1007, -65.9663, -46.0778, -50.9297, -61.0411, -26.9068, -69.0045, -2.89466, 0.0351102, 23)
@@ -378,8 +367,6 @@ visible = false
 position = Vector2(0, -32)
 collision_layer = 2
 collision_mask = 2
-script = ExtResource("4_idbym")
-hitbox_name = "second_attack_up"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox2"]
 polygon = PackedVector2Array(-51.0198, -12.9221, -90.0381, -24.8626, -85.0518, -33.8702, -70.0732, -47.8931, -55.087, -56.916, -29.0931, -60.9557, -8.09158, -59.9877, 12.916, -55.0198, 34.9328, -44.0534, 46.948, -34.0717, 73.0014, 0.888562, 19.0137, 8.97099, 0.0351102, 23)

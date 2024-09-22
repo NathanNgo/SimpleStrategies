@@ -1,15 +1,17 @@
 extends PlayerBody2D
 
-signal player_bodies_hit(attacker: String, player_bodies: Array[PlayerBody2D])
 signal player_body_dead
+signal body_entered(body: Node2D, hitbox_name: StringName)
+signal body_exited(body: Node2D, hitbox_name: StringName)
+signal hit(hitbox_name: StringName)
 
 @export var _animation_player: AnimationPlayer
 @export var _sprites: Node2D
 @export var _death_sprites: Sprite2D
 @export var _warrior_sprites: Sprite2D
-@export var _hitboxes: Node2D
 @export var _camera: Camera2D
 
+@export var hitboxes_container: Node2D = null
 @export var walk_speed: int = 150
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
@@ -28,8 +30,7 @@ const animations = {
 var state = states.IDLE
 var death_animation_finished = false
 var total_dash_frames = 0
-# Dict[String, Array[Node2D]]
-var hitboxes_with_killable_enemies = {}
+# Dict[StringName, Array[Node2D]]
 
 
 func setup(
@@ -43,12 +44,8 @@ func setup(
 func _ready() -> void:
 	_death_sprites.hide()
 
-	_animation_player.animation_attack.connect(_on_attack)
+	_animation_player.animation_attack.connect(_on_hit)
 	_animation_player.animation_finished.connect(_on_animation_finished)
-
-	for hitbox in _hitboxes.hitboxes:
-		hitbox.body_entered.connect(_on_body_entered.bind(hitbox.hitbox_name))
-		hitbox.body_exited.connect(_on_body_exited.bind(hitbox.hitbox_name))
 
 	if _input_synchronizer.is_multiplayer_authority():
 		_camera.make_current()
@@ -173,37 +170,22 @@ func _on_animation_finished(animation_name: String) -> void:
 		death_animation_finished = true
 
 
-func _on_body_entered(body: Node2D, hitbox_name: String) -> void:
-	if body == self:
-		return
-
-	if !hitboxes_with_killable_enemies.has(hitbox_name):
-		# Dicts are untyped, and type inference doesn't work if we don't
-		# tell GDScript what type this array is meant to contain.
-		# This can break functions expecting parameters of certain types.
-		var empty_array: Array[Node2D] = []
-		hitboxes_with_killable_enemies[hitbox_name] = empty_array
-
-	hitboxes_with_killable_enemies[hitbox_name].append(body)
+func _on_body_entered(body: Node2D, hitbox_name: StringName) -> void:
+	body_entered.emit(body, hitbox_name)
 
 
-func _on_body_exited(body: Node2D, hitbox_name: String) -> void:
-	if !hitboxes_with_killable_enemies.has(hitbox_name):
-		var empty_array: Array[Node2D] = []
-		hitboxes_with_killable_enemies[hitbox_name] = empty_array
-
-	hitboxes_with_killable_enemies[hitbox_name].erase(body)
+func _on_body_exited(body: Node2D, hitbox_name: StringName) -> void:
+	body_exited.emit(body, hitbox_name)
 
 
-func _on_attack(hitbox_name: String) -> void:
-	if hitboxes_with_killable_enemies.has(hitbox_name):
-		player_bodies_hit.emit(str(name), hitboxes_with_killable_enemies[hitbox_name])
+func _on_hit(hitbox_name: StringName) -> void:
+	hit.emit(hitbox_name)
 
 
 func set_scale_normal(is_normal=true) -> void:
 	if is_normal:
 		_sprites.scale.x = SCALE_NORMAL
-		_hitboxes.scale.x = SCALE_NORMAL
+		hitboxes_container.scale.x = SCALE_NORMAL
 	else:
 		_sprites.scale.x = SCALE_REVERSED
-		_hitboxes.scale.x = SCALE_REVERSED
+		hitboxes_container.scale.x = SCALE_REVERSED

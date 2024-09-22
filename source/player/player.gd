@@ -4,7 +4,9 @@ signal player_bodies_hit(attacker: String, player_bodies: Array[Node2D])
 
 @export var _warrior_scene: PackedScene
 # @export var _archer_scene: PackedScene
+
 @export var _input_synchronizer: MultiplayerSynchronizer
+@export var player_name: String
 @export var player_id: int:
 	set(new_player_id):
 		player_id = new_player_id
@@ -18,6 +20,7 @@ var character := characters.WARRIOR
 var player_body: PlayerBody2D = null
 var player_body_spawn_position: Vector2
 var characters_scenes: Array[PackedScene]
+var hitboxes_with_hittable_player_bodies = {}
 
 
 func setup(
@@ -31,9 +34,6 @@ func setup(
 func _ready() -> void:
 	_allocate_scenes()
 	_spawn_player_body()
-
-	player_body.player_bodies_hit.connect(_on_player_bodies_hit)
-	player_body.player_body_dead.connect(_on_player_body_dead)
 
 
 func switch_character(character_selection: characters):
@@ -57,6 +57,14 @@ func _spawn_player_body():
 		_input_synchronizer,
 		player_body_spawn_position
 	)
+
+	player_body.player_bodies_hit.connect(_on_player_bodies_hit)
+	player_body.player_body_dead.connect(_on_player_body_dead)
+
+	for hitbox in player_body.hitboxes.hitboxes:
+		hitbox.body_entered.connect(_on_body_entered.bind(hitbox.name))
+		hitbox.body_exited.connect(_on_body_exited.bind(hitbox.name))
+
 	add_child(player_body)
 
 
@@ -70,3 +78,30 @@ func _on_player_bodies_hit(attacker: String, player_bodies: Array[Node2D]):
 
 func _on_player_body_dead():
 	_spawn_player_body()
+
+
+func _on_body_entered(body: Node2D, hitbox_name: String) -> void:
+	if body == self:
+		return
+
+	if !hitboxes_with_hittable_player_bodies.has(hitbox_name):
+		# Dicts are untyped, and type inference doesn't work if we don't
+		# tell GDScript what type this array is meant to contain.
+		# This can break functions expecting parameters of certain types.
+		var empty_array: Array[Node2D] = []
+		hitboxes_with_hittable_player_bodies[hitbox_name] = empty_array
+
+	hitboxes_with_hittable_player_bodies[hitbox_name].append(body)
+
+
+func _on_body_exited(body: Node2D, hitbox_name: String) -> void:
+	if !hitboxes_with_hittable_player_bodies.has(hitbox_name):
+		var empty_array: Array[Node2D] = []
+		hitboxes_with_hittable_player_bodies[hitbox_name] = empty_array
+
+	hitboxes_with_hittable_player_bodies[hitbox_name].erase(body)
+
+
+func _on_hit(hitbox_name: String) -> void:
+	if hitboxes_with_hittable_player_bodies.has(hitbox_name):
+		player_bodies_hit.emit(str(name), hitboxes_with_hittable_player_bodies[hitbox_name])
