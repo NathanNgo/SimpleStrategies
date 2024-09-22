@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=17 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/warrior/animation_player.gd" id="2_pf2e4"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://source/characters/warrior/sprites.gd" id="3_7sr5d"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
 [ext_resource type="Script" path="res://source/characters/warrior/hitboxes.gd" id="4_qw0i4"]
-[ext_resource type="Script" path="res://source/characters/warrior/input_synchronizer.gd" id="8_cajsj"]
 
 [sub_resource type="Animation" id="Animation_1e117"]
 length = 0.001
@@ -61,16 +60,16 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
-"args": ["first_attack_down"],
+"args": ["DownHitbox1"],
 "method": &"attack"
 }, {
-"args": ["first_attack_down"],
+"args": ["DownHitbox1"],
 "method": &"attack"
 }, {
-"args": ["second_attack_down"],
+"args": ["DownHitbox2"],
 "method": &"attack"
 }, {
-"args": ["second_attack_down"],
+"args": ["DownHitbox2"],
 "method": &"attack"
 }]
 }
@@ -101,16 +100,16 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
-"args": ["first_attack_forward"],
+"args": ["ForwardHitbox1"],
 "method": &"attack"
 }, {
-"args": ["first_attack_forward"],
+"args": ["ForwardHitbox1"],
 "method": &"attack"
 }, {
-"args": ["second_attack_forward"],
+"args": ["ForwardHitbox2"],
 "method": &"attack"
 }, {
-"args": ["second_attack_forward"],
+"args": ["ForwardHitbox2"],
 "method": &"attack"
 }]
 }
@@ -141,16 +140,16 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0.3, 0.4, 0.9, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "values": [{
-"args": ["first_attack_up"],
+"args": ["UpHitbox1"],
 "method": &"attack"
 }, {
-"args": ["first_attack_up"],
+"args": ["UpHitbox1"],
 "method": &"attack"
 }, {
-"args": ["second_attack_up"],
+"args": ["UpHitbox2"],
 "method": &"attack"
 }, {
-"args": ["second_attack_up"],
+"args": ["UpHitbox2"],
 "method": &"attack"
 }]
 }
@@ -221,49 +220,20 @@ _data = {
 size = Vector2(40, 16)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h8tdm"]
-properties/0/path = NodePath(".:player_id")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath(".:position")
+properties/1/path = NodePath("Sprites:scale")
 properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("Sprites:scale")
+properties/1/replication_mode = 0
+properties/2/path = NodePath("Hitboxes:scale")
 properties/2/spawn = true
 properties/2/replication_mode = 0
-properties/3/path = NodePath("Hitboxes:scale")
+properties/3/path = NodePath(".:y_sort_enabled")
 properties/3/spawn = true
-properties/3/replication_mode = 0
-properties/4/path = NodePath(".:y_sort_enabled")
-properties/4/spawn = true
-properties/4/replication_mode = 2
+properties/3/replication_mode = 2
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ik3sn"]
-properties/0/path = NodePath("InputSynchronizer:attack")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("InputSynchronizer:move_left")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath("InputSynchronizer:move_right")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-properties/3/path = NodePath("InputSynchronizer:move_up")
-properties/3/spawn = true
-properties/3/replication_mode = 1
-properties/4/path = NodePath("InputSynchronizer:move_down")
-properties/4/spawn = true
-properties/4/replication_mode = 1
-properties/5/path = NodePath("InputSynchronizer:dash")
-properties/5/spawn = true
-properties/5/replication_mode = 1
-properties/6/path = NodePath("InputSynchronizer:direction")
-properties/6/spawn = true
-properties/6/replication_mode = 1
-properties/7/path = NodePath("InputSynchronizer:mouse_position")
-properties/7/spawn = true
-properties/7/replication_mode = 1
-
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_hitboxes", "_camera")]
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "_camera", "hitboxes_container")]
 y_sort_enabled = true
 rotation = 0.00152653
 collision_layer = 3
@@ -272,15 +242,8 @@ _animation_player = NodePath("AnimationPlayer")
 _sprites = NodePath("Sprites")
 _death_sprites = NodePath("Sprites/DeathSprites")
 _warrior_sprites = NodePath("Sprites/WarriorSprites")
-_hitboxes = NodePath("Hitboxes")
 _camera = NodePath("Camera2D")
-
-[node name="Label" type="Label" parent="."]
-offset_left = -61.0
-offset_top = -76.0
-offset_right = 64.0
-offset_bottom = 23.0
-horizontal_alignment = 1
+hitboxes_container = NodePath("Hitboxes")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -371,12 +334,5 @@ collision_mask = 2
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitboxes/UpHitbox2"]
 polygon = PackedVector2Array(-51.0198, -12.9221, -90.0381, -24.8626, -85.0518, -33.8702, -70.0732, -47.8931, -55.087, -56.916, -29.0931, -60.9557, -8.09158, -59.9877, 12.916, -55.0198, 34.9328, -44.0534, 46.948, -34.0717, 73.0014, 0.888562, 19.0137, 8.97099, 0.0351102, 23)
 
-[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerBodySynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_h8tdm")
-
-[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("_mouse_position_finder")]
-replication_config = SubResource("SceneReplicationConfig_ik3sn")
-script = ExtResource("8_cajsj")
-_mouse_position_finder = NodePath("MousePositionFinder")
-
-[node name="MousePositionFinder" type="Node2D" parent="InputSynchronizer"]

@@ -9,7 +9,7 @@ func _ready() -> void:
 	MultiplayerLobby.player_connected.connect(_on_player_connected)
 
 
-func _on_player_bodies_hit(_attacker: String, player_bodies: Array[Node2D]) -> void:
+func _on_player_bodies_hit_from_player(_attacker: String, player_bodies: Array[PlayerBody2D]) -> void:
 	for player_body in player_bodies:
 		player_body.die.rpc()
 
@@ -20,7 +20,7 @@ func create_player(peer_id: int):
 		peer_id,
 		_player_spawn_point.position,
 	)
-	player.player_bodies_hit.connect(_on_player_bodies_hit)
+	player.player_bodies_hit_from_player.connect(_on_player_bodies_hit_from_player)
 
 	_players.add_child(player, true)
 

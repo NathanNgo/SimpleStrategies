@@ -3,6 +3,12 @@ extends CharacterBody2D
 class_name PlayerBody2D
 
 signal player_moved()
+signal player_body_dead
+signal body_entered(body: Node2D, hitbox_name: StringName)
+signal body_exited(body: Node2D, hitbox_name: StringName)
+signal player_bodies_hit(hitbox_name: StringName)
+signal create_projectile(projectile: Node2D)
+
 
 @export var _input_synchronizer: MultiplayerSynchronizer
 

@@ -24,6 +24,6 @@ position = Vector2(1664, 256)
 y_sort_enabled = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://source/characters/warrior/warrior.tscn")
+_spawnable_scenes = PackedStringArray("res://source/player/player.tscn")
 spawn_path = NodePath("../Players")
-spawn_limit = 3
+spawn_limit = 6

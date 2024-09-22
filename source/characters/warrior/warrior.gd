@@ -1,15 +1,9 @@
 extends PlayerBody2D
 
-signal player_body_dead
-signal body_entered(body: Node2D, hitbox_name: StringName)
-signal body_exited(body: Node2D, hitbox_name: StringName)
-signal hit(hitbox_name: StringName)
-
 @export var _animation_player: AnimationPlayer
 @export var _sprites: Node2D
 @export var _death_sprites: Sprite2D
 @export var _warrior_sprites: Sprite2D
-@export var _camera: Camera2D
 
 @export var hitboxes_container: Node2D = null
 @export var walk_speed: int = 150
@@ -30,7 +24,6 @@ const animations = {
 var state = states.IDLE
 var death_animation_finished = false
 var total_dash_frames = 0
-# Dict[StringName, Array[Node2D]]
 
 
 func setup(
@@ -44,11 +37,8 @@ func setup(
 func _ready() -> void:
 	_death_sprites.hide()
 
-	_animation_player.animation_attack.connect(_on_hit)
+	_animation_player.animation_attack.connect(_on_player_bodies_hit)
 	_animation_player.animation_finished.connect(_on_animation_finished)
-
-	if _input_synchronizer.is_multiplayer_authority():
-		_camera.make_current()
 
 
 func _physics_process(_delta) -> void:
@@ -171,6 +161,8 @@ func _on_animation_finished(animation_name: String) -> void:
 
 
 func _on_body_entered(body: Node2D, hitbox_name: StringName) -> void:
+	print(body)
+	print(hitbox_name)
 	body_entered.emit(body, hitbox_name)
 
 
@@ -178,8 +170,8 @@ func _on_body_exited(body: Node2D, hitbox_name: StringName) -> void:
 	body_exited.emit(body, hitbox_name)
 
 
-func _on_hit(hitbox_name: StringName) -> void:
-	hit.emit(hitbox_name)
+func _on_player_bodies_hit(hitbox_name: StringName) -> void:
+	player_bodies_hit.emit(hitbox_name)
 
 
 func set_scale_normal(is_normal=true) -> void:
