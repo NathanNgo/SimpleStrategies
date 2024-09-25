@@ -11,7 +11,7 @@ func _ready() -> void:
 
 func _on_player_bodies_hit_from_player(_attacker: String, player_bodies: Array[PlayerBody2D]) -> void:
 	for player_body in player_bodies:
-		player_body.die.rpc()
+		player_body.die()
 
 
 func create_player(peer_id: int):

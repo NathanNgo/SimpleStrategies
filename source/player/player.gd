@@ -3,7 +3,7 @@ extends Node2D
 signal player_bodies_hit_from_player(attacker: String, player_bodies: Array[Node2D])
 
 @export var _warrior_scene: PackedScene
-# @export var _archer_scene: PackedScene
+@export var _archer_scene: PackedScene
 
 @export var _camera: Camera2D
 @export var _projectiles_container: Node2D
@@ -16,9 +16,9 @@ signal player_bodies_hit_from_player(attacker: String, player_bodies: Array[Node
 
 enum characters {
 	WARRIOR,
-	# ARCHER
+	ARCHER
 }
-var character := characters.WARRIOR
+var character := characters.ARCHER
 var player_body: PlayerBody2D = null
 var player_body_spawn_position: Vector2
 var characters_scenes: Array[PackedScene]
@@ -54,7 +54,7 @@ func switch_character(character_selection: characters):
 func _allocate_scenes():
 	characters_scenes = [
 		_warrior_scene,
-		# _archer_scene
+		_archer_scene
 	]
 
 
@@ -71,10 +71,8 @@ func _spawn_player_body():
 	player_body.player_bodies_hit.connect(_on_player_bodies_hit)
 	player_body.player_body_dead.connect(_on_player_body_dead)
 	player_body.create_projectile.connect(_on_create_projectile)
-
-	for hitbox in player_body.hitboxes_container.hitboxes:
-		hitbox.body_entered.connect(_on_body_entered.bind(hitbox.name))
-		hitbox.body_exited.connect(_on_body_exited.bind(hitbox.name))
+	player_body.body_entered.connect(_on_body_entered)
+	player_body.body_exited.connect(_on_body_exited)
 
 	add_child(player_body)
 

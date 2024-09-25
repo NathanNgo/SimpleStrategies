@@ -5,9 +5,9 @@ extends PlayerBody2D
 @export var _death_sprites: Sprite2D
 @export var _warrior_sprites: Sprite2D
 
-@export var hitboxes_container: Node2D = null
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
+@export var state = states.IDLE
 
 enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -20,20 +20,21 @@ const animations = {
 	DIE = "die",
 }
 
-var state = states.IDLE
 var death_animation_finished = false
 var total_dash_frames = 0
 
 
 func setup(
-	_input_synchronizer_: MultiplayerSynchronizer,
+	input_synchronizer_: MultiplayerSynchronizer,
 	position_: Vector2,
 ):
-	self._input_synchronizer = _input_synchronizer_
+	self.input_synchronizer = input_synchronizer_
 	self.position = position_
 	
 
 func _ready() -> void:
+	super._ready()
+
 	_death_sprites.hide()
 
 	_animation_player.animation_attack.connect(_on_player_bodies_hit)
@@ -43,10 +44,10 @@ func _ready() -> void:
 func _physics_process(_delta) -> void:
 	match state:
 		states.IDLE:
-			if _input_synchronizer.attack:
+			if input_synchronizer.attack:
 				state = states.ATTACKING
-				_attack(_get_direction_to_mouse())
-			elif _is_move_action_pressed():
+				_attack()
+			elif is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
@@ -54,13 +55,13 @@ func _physics_process(_delta) -> void:
 				_idle()
 
 		states.WALKING:
-			if _input_synchronizer.attack:
+			if input_synchronizer.attack:
 				state = states.ATTACKING
-				_attack(_get_direction_to_mouse())
-			elif _input_synchronizer.dash:
+				_attack()
+			elif input_synchronizer.dash:
 				state = states.DASHING
 				_dash()
-			elif _is_move_action_pressed():
+			elif is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
@@ -68,9 +69,9 @@ func _physics_process(_delta) -> void:
 				_idle()
 
 		states.ATTACKING:
-			if _input_synchronizer.attack:
-				_attack(_get_direction_to_mouse())
-			elif _is_move_action_pressed():
+			if input_synchronizer.attack:
+				_attack()
+			elif is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
@@ -80,7 +81,7 @@ func _physics_process(_delta) -> void:
 		states.DASHING:
 			if total_dash_frames < max_dash_frames:
 				_dash()
-			elif _is_move_action_pressed():
+			elif is_move_action_pressed():
 				total_dash_frames = 0
 				state = states.WALKING
 				_walk()
@@ -93,25 +94,13 @@ func _physics_process(_delta) -> void:
 			_die()
 
 
-func _is_move_action_pressed() -> bool:
-	return (
-		_input_synchronizer.move_right or
-		_input_synchronizer.move_left or
-		_input_synchronizer.move_up or
-		_input_synchronizer.move_down
-	)
-
-
 func _idle() -> void:
 	_animation_player.play(animations.IDLE)
 
 
-func _get_direction_to_mouse():
-	var mouse_position = _input_synchronizer.mouse_position
-	return position.direction_to(mouse_position)
-
-
-func _attack(direction: Vector2) -> void:
+func _attack() -> void:
+	var direction = get_direction_to_mouse()
+	
 	if abs(direction.x) > abs(direction.y):
 		if direction.x > AXIS_NEUTRAL:
 			set_scale_normal(true)
@@ -137,7 +126,7 @@ func _walk() -> void:
 
 func _move(speed: int) -> void:
 	_animation_player.play(animations.WALK)
-	_move_player(speed, set_scale_normal)
+	move_player_body(speed, set_scale_normal)
 
 
 func _die():
@@ -147,9 +136,9 @@ func _die():
 
 	if death_animation_finished:
 		player_body_dead.emit()
+		_death_sprites.hide()
 
 
-@rpc("any_peer", "call_local")
 func die():
 	state = states.DEAD
 
@@ -157,18 +146,6 @@ func die():
 func _on_animation_finished(animation_name: String) -> void:
 	if animation_name == animations.DIE:
 		death_animation_finished = true
-
-
-func _on_body_entered(body: Node2D, hitbox_name: StringName) -> void:
-	body_entered.emit(body, hitbox_name)
-
-
-func _on_body_exited(body: Node2D, hitbox_name: StringName) -> void:
-	body_exited.emit(body, hitbox_name)
-
-
-func _on_player_bodies_hit(hitbox_name: StringName) -> void:
-	player_bodies_hit.emit(hitbox_name)
 
 
 func set_scale_normal(is_normal=true) -> void:

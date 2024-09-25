@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://th5a5353c0q0"]
+[gd_scene load_steps=7 format=3 uid="uid://th5a5353c0q0"]
 
 [ext_resource type="Script" path="res://source/player/player.gd" id="1_6x0rl"]
-[ext_resource type="Script" path="res://source/characters/warrior/input_synchronizer.gd" id="2_8rd8m"]
+[ext_resource type="Script" path="res://source/player/input_synchronizer.gd" id="2_8rd8m"]
 [ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="2_m5ir0"]
+[ext_resource type="PackedScene" uid="uid://g3us0p5v2s8h" path="res://source/characters/archer/archer.tscn" id="3_akci0"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7qgli"]
 properties/0/path = NodePath(".:player_id")
@@ -10,7 +11,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 2
 properties/1/path = NodePath(".:y_sort_enabled")
 properties/1/spawn = true
-properties/1/replication_mode = 1
+properties/1/replication_mode = 0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
 properties/0/path = NodePath("InputSynchronizer:attack")
@@ -42,12 +43,13 @@ properties/7/replication_mode = 1
 y_sort_enabled = true
 script = ExtResource("1_6x0rl")
 _warrior_scene = ExtResource("2_m5ir0")
+_archer_scene = ExtResource("3_akci0")
 _camera = NodePath("Camera2D")
 _projectiles_container = NodePath("ProjectilesContainer")
 _input_synchronizer = NodePath("InputSynchronizer")
 player_name = "John"
 
-[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_7qgli")
 
 [node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="." node_paths=PackedStringArray("_mouse_position_finder")]

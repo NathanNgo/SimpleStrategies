@@ -26,7 +26,7 @@ y_sort_enabled = true
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://source/player/player.tscn")
 spawn_path = NodePath("../Players")
-spawn_limit = 6
+spawn_limit = 30
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(3488, 2880)

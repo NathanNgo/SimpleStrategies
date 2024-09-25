@@ -4,7 +4,7 @@ extends Node
 signal player_connected(peer_id: int)
 
 
-const PORT = 9999
+const PORT = 9123
 const MAX_CONNECTIONS = 30
 
 var local_id: int
