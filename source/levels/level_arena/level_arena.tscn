@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://cokb2q5ky857y" path="res://source/levels/level_arena/map/map.tscn" id="3_xp6ot"]
 
 [node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_players", "_player_spawn_point")]
-y_sort_enabled = true
 script = ExtResource("1_7s657")
 _player_scene = ExtResource("2_ugal2")
 _players = NodePath("Players")

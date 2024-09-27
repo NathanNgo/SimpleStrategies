@@ -85,7 +85,7 @@ func _on_body_entered(body: Node2D, hitbox_name: String) -> void:
 	if body == player_body:
 		return
 
-	if !hitboxes_with_hittable_player_bodies.has(hitbox_name):
+	if not hitboxes_with_hittable_player_bodies.has(hitbox_name):
 		# Dicts are untyped, and type inference doesn't work if we don't
 		# tell GDScript what type this array is meant to contain.
 		# This can break functions expecting parameters of certain types.
@@ -96,7 +96,7 @@ func _on_body_entered(body: Node2D, hitbox_name: String) -> void:
 
 
 func _on_body_exited(body: Node2D, hitbox_name: String) -> void:
-	if !hitboxes_with_hittable_player_bodies.has(hitbox_name):
+	if not hitboxes_with_hittable_player_bodies.has(hitbox_name):
 		var empty_array: Array[PlayerBody2D] = []
 		hitboxes_with_hittable_player_bodies[hitbox_name] = empty_array
 
@@ -108,5 +108,10 @@ func _on_player_bodies_hit(hitbox_name: String) -> void:
 		player_bodies_hit_from_player.emit(player_name, hitboxes_with_hittable_player_bodies[hitbox_name])
 
 
-func _on_create_projectile(projectile: Node2D):
+func _on_create_projectile(projectile: Node2D, spawn_position: Vector2, target_position: Vector2):
 	_projectiles_container.add_child(projectile)
+	print("Arrow")
+	projectile.setup(
+		spawn_position,
+		target_position
+	)

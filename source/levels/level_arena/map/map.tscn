@@ -3,7 +3,6 @@
 [ext_resource type="TileSet" uid="uid://c3pq5ujes586" path="res://source/map_texture_resources/map.tres" id="1_qvf6l"]
 
 [node name="Map" type="Node2D"]
-y_sort_enabled = true
 
 [node name="Water" type="TileMapLayer" parent="."]
 use_parent_material = true

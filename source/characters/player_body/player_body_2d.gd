@@ -7,7 +7,7 @@ signal player_body_dead
 signal body_entered(body: Node2D, hitbox_name: StringName)
 signal body_exited(body: Node2D, hitbox_name: StringName)
 signal player_bodies_hit(hitbox_name: StringName)
-signal create_projectile(projectile: Node2D)
+signal create_projectile(projectile: Node2D, spawn_position: Vector2, target_position: Vector2)
 
 
 @export var walk_speed: int = 150
@@ -72,4 +72,3 @@ func _on_body_exited(body: Node2D, hitbox_name: StringName) -> void:
 
 func _on_player_bodies_hit(hitbox_name: StringName) -> void:
 	player_bodies_hit.emit(hitbox_name)
-

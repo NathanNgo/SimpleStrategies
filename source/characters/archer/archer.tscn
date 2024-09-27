@@ -1,28 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://g3us0p5v2s8h"]
+[gd_scene load_steps=17 format=3 uid="uid://g3us0p5v2s8h"]
 
 [ext_resource type="Script" path="res://source/characters/archer/archer.gd" id="1_dij1d"]
-[ext_resource type="Script" path="res://source/characters/player_body/sprites.gd" id="3_7sr5d"]
+[ext_resource type="PackedScene" uid="uid://dgjw21g2hxlcg" path="res://source/characters/archer/arrow.tscn" id="2_jugn6"]
 [ext_resource type="Texture2D" uid="uid://c1acg6ul4svqy" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Bow_Blue.png" id="3_cyl8l"]
 [ext_resource type="Texture2D" uid="uid://bhf7ryc2ms8ps" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Blue_(NoArms).png" id="3_my82u"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
 [ext_resource type="Texture2D" uid="uid://d3dvcng3l04v" path="res://assets/Factions/Knights/Troops/Archer/Blue/Archer_Blue.png" id="6_2wgfu"]
-
-[sub_resource type="Animation" id="Animation_136w2"]
-resource_name = "idle"
-length = 0.60001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprites/ArcherSprites:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [0, 1, 2, 3, 4, 5]
-}
 
 [sub_resource type="Animation" id="Animation_bh0aq"]
 length = 0.001
@@ -38,22 +21,17 @@ tracks/0/keys = {
 "update": 1,
 "values": [0]
 }
-
-[sub_resource type="Animation" id="Animation_aiwkm"]
-resource_name = "walk"
-length = 0.60001
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprites/ArcherSprites:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [8, 9, 10, 11, 12, 13]
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprites/ArcherSeparatedSprites/BowPivot/BowSprites:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
 }
 
 [sub_resource type="Animation" id="Animation_548xe"]
@@ -74,9 +52,98 @@ tracks/0/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 }
 
+[sub_resource type="Animation" id="Animation_136w2"]
+resource_name = "idle"
+length = 0.60001
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/ArcherSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_aiwkm"]
+resource_name = "walk"
+length = 0.60001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/ArcherSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [8, 9, 10, 11, 12, 13]
+}
+
+[sub_resource type="Animation" id="Animation_t2v8g"]
+resource_name = "bow_charging"
+length = 0.60001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/ArcherSeparatedSprites/BowPivot/BowSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11, 12, 13]
+}
+
+[sub_resource type="Animation" id="Animation_ampfp"]
+resource_name = "bow_charged"
+length = 0.10001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/ArcherSeparatedSprites/BowPivot/BowSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [13]
+}
+
+[sub_resource type="Animation" id="Animation_alsbo"]
+resource_name = "bow_releasing"
+length = 0.20001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites/ArcherSeparatedSprites/BowPivot/BowSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [14, 15]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_4rae1"]
 _data = {
 "RESET": SubResource("Animation_bh0aq"),
+"bow_charged": SubResource("Animation_ampfp"),
+"bow_charging": SubResource("Animation_t2v8g"),
+"bow_releasing": SubResource("Animation_alsbo"),
 "die": SubResource("Animation_548xe"),
 "idle": SubResource("Animation_136w2"),
 "walk": SubResource("Animation_aiwkm")
@@ -102,7 +169,7 @@ properties/4/path = NodePath(".:state")
 properties/4/spawn = true
 properties/4/replication_mode = 2
 
-[node name="Archer" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_archer_separated_sprites", "_archer_sprites", "_death_sprites")]
+[node name="Archer" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_archer_separated_sprites", "_archer_sprites", "_death_sprites", "_bow_pivot")]
 y_sort_enabled = true
 rotation = 0.00152653
 collision_layer = 7
@@ -112,15 +179,15 @@ _sprites = NodePath("Sprites")
 _archer_separated_sprites = NodePath("Sprites/ArcherSeparatedSprites")
 _archer_sprites = NodePath("Sprites/ArcherSprites")
 _death_sprites = NodePath("Sprites/DeathSprites")
+_bow_pivot = NodePath("Sprites/ArcherSeparatedSprites/BowPivot")
+_arrow_scene = ExtResource("2_jugn6")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_4rae1")
 }
 
-[node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
-script = ExtResource("3_7sr5d")
-sprites = [NodePath("ArcherSprites"), NodePath("DeathSprites"), NodePath("ArcherSeparatedSprites/BowSprites"), NodePath("ArcherSeparatedSprites/ArcherBodySprites")]
+[node name="Sprites" type="Node2D" parent="."]
 
 [node name="ArcherSprites" type="Sprite2D" parent="Sprites"]
 texture = ExtResource("6_2wgfu")
@@ -129,15 +196,12 @@ vframes = 7
 
 [node name="DeathSprites" type="Sprite2D" parent="Sprites"]
 visible = false
-scale = Vector2(1, 1)
 texture = ExtResource("4_eh6nl")
 hframes = 7
 vframes = 2
 
-[node name="ArcherSeparatedSprites" type="Node2D" parent="Sprites" node_paths=PackedStringArray("sprites")]
+[node name="ArcherSeparatedSprites" type="Node2D" parent="Sprites"]
 visible = false
-script = ExtResource("3_7sr5d")
-sprites = [NodePath("BowSprites"), NodePath("ArcherBodySprites")]
 
 [node name="ArcherBodySprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites"]
 rotation = -0.00152653
@@ -145,11 +209,15 @@ texture = ExtResource("3_my82u")
 hframes = 6
 vframes = 2
 
-[node name="BowSprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites"]
-scale = Vector2(1, 1)
+[node name="BowPivot" type="Node2D" parent="Sprites/ArcherSeparatedSprites"]
+position = Vector2(0.0152653, 9.99999)
+
+[node name="BowSprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites/BowPivot"]
+position = Vector2(-0.0152653, -9.99999)
 texture = ExtResource("3_cyl8l")
 hframes = 8
 vframes = 2
+frame = 8
 
 [node name="BodyHitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 32)

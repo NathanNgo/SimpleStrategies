@@ -1,9 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=16 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/player_body/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
-[ext_resource type="Script" path="res://source/characters/player_body/sprites.gd" id="3_7sr5d"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
 [ext_resource type="Script" path="res://source/characters/player_body/hitboxes.gd" id="4_qw0i4"]
 
@@ -253,9 +252,7 @@ libraries = {
 }
 script = ExtResource("2_pf2e4")
 
-[node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
-script = ExtResource("3_7sr5d")
-sprites = [NodePath("WarriorSprites"), NodePath("DeathSprites")]
+[node name="Sprites" type="Node2D" parent="."]
 
 [node name="WarriorSprites" type="Sprite2D" parent="Sprites"]
 rotation = -0.00152653

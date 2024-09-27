@@ -144,8 +144,9 @@ func die():
 
 
 func _on_animation_finished(animation_name: String) -> void:
-	if animation_name == animations.DIE:
-		death_animation_finished = true
+	match animation_name:
+		animations.DIE:
+			death_animation_finished = true
 
 
 func set_scale_normal(is_normal=true) -> void:
