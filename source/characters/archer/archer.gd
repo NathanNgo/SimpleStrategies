@@ -8,10 +8,9 @@ extends PlayerBody2D
 @export var _bow_pivot: Node2D
 @export var _arrow_scene: PackedScene
 
-@export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
 @export var state = states.IDLE
-@export var bow_state = states.IDLE
+@export var death_animation_finished = false
 
 enum states {IDLE, WALKING, BOW_CHARGING, BOW_RELEASED, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -24,11 +23,11 @@ const animations = {
 	BOW_RELEASING = "bow_releasing"
 }
 
-var death_animation_finished = false
-var bow_completely_charged = false
-var bow_completely_released = false
 var arrow_created = false
 var total_dash_frames = 0
+var bow_reset = false
+var bow_completely_charged = false
+var bow_completely_released = false
 
 
 func setup(
@@ -45,25 +44,27 @@ func _ready() -> void:
 	_death_sprites.hide()
 
 	_animation_player.animation_finished.connect(_on_animation_finished)
+	player_body_area.player_area_hit.connect(_on_player_area_hit)
 
 
 func _physics_process(_delta) -> void:
 	match state:
 		states.IDLE, states.WALKING:
 			if input_synchronizer.attack:
+				_reset_bow()
 				state = states.BOW_CHARGING
-				bow_completely_charged = false
-				bow_completely_released = false
-				arrow_created = false
 				_charge_bow()
 			elif is_move_action_pressed():
 				state = states.WALKING
 				_walk()
 			else:
-				state = states.IDLE
 				_idle()
 
 		states.BOW_CHARGING:
+			if not bow_reset:
+				_reset_bow()
+				bow_reset = true
+
 			if input_synchronizer.attack:
 				_charge_bow()
 			elif bow_completely_charged:
@@ -90,7 +91,14 @@ func _physics_process(_delta) -> void:
 			_die()
 
 
+func _reset_bow():
+	bow_completely_charged = false
+	bow_completely_released = false
+	arrow_created = false
+
+
 func _idle() -> void:
+	_show_archer_alive_sprites(true)
 	_show_archer_separated_sprites(false)
 	_animation_player.play(animations.IDLE)
 
@@ -116,11 +124,11 @@ func _release_bow() -> void:
 		)
 		arrow_created = true
 
-	if not bow_completely_released:
-		_animation_player.play(animations.BOW_RELEASING)
+	_animation_player.play(animations.BOW_RELEASING)
 
 
 func _aim() -> void:
+	_show_archer_alive_sprites(true)
 	_show_archer_separated_sprites(true)
 	var direction = get_direction_to_mouse()
 
@@ -137,24 +145,26 @@ func _walk() -> void:
 
 
 func _move(speed: int) -> void:
+	_show_archer_alive_sprites(true)
 	_show_archer_separated_sprites(false)
 	_animation_player.play(animations.WALK)
 	move_player_body(speed, set_scale_normal)
 
 
 func _die():
-	_archer_separated_sprites.hide()
-	_archer_sprites.hide()
-	_death_sprites.show()
+	_show_archer_alive_sprites(false)
 	_animation_player.play(animations.DIE)
 
 	if death_animation_finished:
 		player_body_dead.emit()
-		_death_sprites.hide()
 
 
-func die():
+func _set_player_state_to_dead():
 	state = states.DEAD
+
+
+func _on_player_area_hit():
+	_set_player_state_to_dead()
 
 
 func _on_animation_finished(animation_name: String) -> void:
@@ -165,6 +175,7 @@ func _on_animation_finished(animation_name: String) -> void:
 			bow_completely_charged = true
 		animations.BOW_RELEASING:
 			bow_completely_released = true
+			bow_reset = false
 
 
 func set_scale_normal(is_normal=true) -> void:
@@ -174,6 +185,12 @@ func set_scale_normal(is_normal=true) -> void:
 		_sprites.scale.x = SCALE_REVERSED
 
 
+func reset_player_body(spawn_position):
+	state = states.IDLE
+	position = spawn_position
+	death_animation_finished = false
+
+
 func _show_archer_separated_sprites(is_showing := true):
 	if is_showing:
 		_archer_separated_sprites.show()
@@ -181,3 +198,14 @@ func _show_archer_separated_sprites(is_showing := true):
 	else:
 		_archer_separated_sprites.hide()
 		_archer_sprites.show()
+
+
+func _show_archer_alive_sprites(alive := true):
+	if alive:
+		_death_sprites.hide()
+		_archer_separated_sprites.show()
+		_archer_sprites.show()
+	else:
+		_death_sprites.show()
+		_archer_separated_sprites.hide()
+		_archer_sprites.hide()

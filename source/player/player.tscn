@@ -12,6 +12,9 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:y_sort_enabled")
 properties/1/spawn = true
 properties/1/replication_mode = 0
+properties/2/path = NodePath(".:player_body_spawn_position")
+properties/2/spawn = true
+properties/2/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
 properties/0/path = NodePath("InputSynchronizer:attack")
@@ -63,3 +66,8 @@ _mouse_position_finder = NodePath("MousePositionFinder")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://source/characters/archer/arrow.tscn")
+spawn_path = NodePath("../ProjectilesContainer")
+spawn_limit = 100

@@ -65,5 +65,6 @@ escape={
 
 [layer_names]
 
-2d_physics/layer_1="Player"
-2d_physics/layer_2="Hitbox"
+2d_physics/layer_1="Navigation"
+2d_physics/layer_2="AttackHitboxes"
+2d_physics/layer_3="Projectiles"

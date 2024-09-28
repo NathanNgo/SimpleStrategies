@@ -8,6 +8,7 @@ extends PlayerBody2D
 @export var dash_speed: int =  700
 @export var max_dash_frames: int = 5
 @export var state = states.IDLE
+@export var death_animation_finished = false
 
 enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -20,7 +21,6 @@ const animations = {
 	DIE = "die",
 }
 
-var death_animation_finished = false
 var total_dash_frames = 0
 
 
@@ -37,8 +37,9 @@ func _ready() -> void:
 
 	_death_sprites.hide()
 
-	_animation_player.animation_attack.connect(_on_player_bodies_hit)
+	_animation_player.animation_attack.connect(_on_player_areas_hit)
 	_animation_player.animation_finished.connect(_on_animation_finished)
+	player_body_area.player_area_hit.connect(_on_player_area_hit)
 
 
 func _physics_process(_delta) -> void:
@@ -95,10 +96,12 @@ func _physics_process(_delta) -> void:
 
 
 func _idle() -> void:
+	_show_warrior_alive_sprites(true)
 	_animation_player.play(animations.IDLE)
 
 
 func _attack() -> void:
+	_show_warrior_alive_sprites(true)
 	var direction = get_direction_to_mouse()
 	
 	if abs(direction.x) > abs(direction.y):
@@ -125,22 +128,25 @@ func _walk() -> void:
 
 
 func _move(speed: int) -> void:
+	_show_warrior_alive_sprites(true)
 	_animation_player.play(animations.WALK)
 	move_player_body(speed, set_scale_normal)
 
 
 func _die():
-	_warrior_sprites.hide()
-	_death_sprites.show()
+	_show_warrior_alive_sprites(false)
 	_animation_player.play(animations.DIE)
 
 	if death_animation_finished:
 		player_body_dead.emit()
-		_death_sprites.hide()
 
 
-func die():
+func _set_player_state_to_dead():
 	state = states.DEAD
+
+
+func _on_player_area_hit():
+	_set_player_state_to_dead()
 
 
 func _on_animation_finished(animation_name: String) -> void:
@@ -156,3 +162,18 @@ func set_scale_normal(is_normal=true) -> void:
 	else:
 		_sprites.scale.x = SCALE_REVERSED
 		hitboxes_container.scale.x = SCALE_REVERSED
+
+
+func reset_player_body(spawn_position):
+	state = states.IDLE
+	position = spawn_position
+	death_animation_finished = false
+
+
+func _show_warrior_alive_sprites(alive := true):
+	if alive:
+		_death_sprites.hide()
+		_warrior_sprites.show()
+	else:
+		_warrior_sprites.hide()
+		_death_sprites.show()

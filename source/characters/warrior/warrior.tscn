@@ -1,10 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=18 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/player_body/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
 [ext_resource type="Script" path="res://source/characters/player_body/hitboxes.gd" id="4_qw0i4"]
+[ext_resource type="Script" path="res://source/characters/player_body/player_area.gd" id="6_x51bo"]
 
 [sub_resource type="Animation" id="Animation_1e117"]
 length = 0.001
@@ -218,6 +219,10 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
 size = Vector2(40, 16)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gtgik"]
+radius = 21.0046
+height = 67.9999
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h8tdm"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -235,16 +240,16 @@ properties/4/path = NodePath(".:state")
 properties/4/spawn = true
 properties/4/replication_mode = 2
 
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "hitboxes_container")]
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "hitboxes_container", "player_body_area")]
 y_sort_enabled = true
 rotation = 0.00152653
-collision_layer = 7
 script = ExtResource("1_dr5k8")
 _animation_player = NodePath("AnimationPlayer")
 _sprites = NodePath("Sprites")
 _death_sprites = NodePath("Sprites/DeathSprites")
 _warrior_sprites = NodePath("Sprites/WarriorSprites")
 hitboxes_container = NodePath("Hitboxes")
+player_body_area = NodePath("Hitboxes/BodyHitbox")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -266,7 +271,8 @@ texture = ExtResource("4_eh6nl")
 hframes = 7
 vframes = 2
 
-[node name="BodyHitbox" type="CollisionShape2D" parent="."]
+[node name="NavigationHitbox" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_ra4dr")
 
@@ -275,6 +281,17 @@ visible = false
 position = Vector2(0, 32)
 script = ExtResource("4_qw0i4")
 hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2")]
+
+[node name="BodyHitbox" type="Area2D" parent="Hitboxes"]
+scale = Vector2(1, 1)
+collision_layer = 6
+collision_mask = 0
+script = ExtResource("6_x51bo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/BodyHitbox"]
+position = Vector2(0.00915917, -26)
+scale = Vector2(1, 1)
+shape = SubResource("CapsuleShape2D_gtgik")
 
 [node name="DownHitbox1" type="Area2D" parent="Hitboxes"]
 position = Vector2(0, -32)
@@ -285,6 +302,7 @@ collision_mask = 2
 polygon = PackedVector2Array(68.0365, 23.8962, 68.0533, 34.8961, 61.09, 58.9068, 43.119, 77.9343, 26.1267, 82.9602, 5.12212, 79.9923, -6.88245, 77.0106, -32.9068, 61.0503, -50.9358, 42.0778, -55.9496, 33.0854, -16.9694, 20.0259)
 
 [node name="DownHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
@@ -293,6 +311,7 @@ collision_mask = 2
 polygon = PackedVector2Array(5.03663, 23.9923, 90.0182, 11.8626, 88.0243, 15.8656, 80.061, 39.8778, 40.0977, 63.9389, 10.1038, 67.9847, -19.9069, 61.0305, -40.9404, 39.0625, -52.974, 17.0809, -54.9938, 4.08395)
 
 [node name="ForwardHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
@@ -301,6 +320,7 @@ collision_mask = 2
 polygon = PackedVector2Array(15.0443, 28.9771, 77.0808, 52.8824, 87.0243, 15.8672, 86.9846, -10.1328, 69.9251, -49.1068, 47.9007, -65.0732, 24.8916, -71.0381, 18.9542, -30.029, 16, -0.0244245)
 
 [node name="ForwardHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
@@ -317,6 +337,7 @@ collision_mask = 2
 polygon = PackedVector2Array(41.9984, -1.06411, 63.9831, -11.0977, 72.9663, -22.1114, 42.919, -53.0656, 19.9038, -63.0304, -6.10379, -67.9907, -22.1007, -65.9663, -46.0778, -50.9297, -61.0411, -26.9068, -69.0045, -2.89466, 0.0351102, 23)
 
 [node name="UpHitbox2" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
