@@ -19,7 +19,7 @@ enum characters {
 	WARRIOR,
 	ARCHER
 }
-var character := characters.ARCHER
+var character := characters.WARRIOR
 var player_body: PlayerBody2D = null
 var characters_scenes: Array[PackedScene]
 # Dict[StringName, Array[Area2D]]
