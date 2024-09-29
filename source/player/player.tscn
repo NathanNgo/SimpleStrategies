@@ -41,15 +41,23 @@ properties/6/replication_mode = 1
 properties/7/path = NodePath("InputSynchronizer:mouse_position")
 properties/7/spawn = true
 properties/7/replication_mode = 1
+properties/8/path = NodePath("InputSynchronizer:switch_character_one")
+properties/8/spawn = true
+properties/8/replication_mode = 1
+properties/9/path = NodePath("InputSynchronizer:switch_character_two")
+properties/9/spawn = true
+properties/9/replication_mode = 1
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("_camera", "_projectiles_container", "_input_synchronizer")]
 y_sort_enabled = true
 script = ExtResource("1_6x0rl")
-_warrior_scene = ExtResource("2_m5ir0")
-_archer_scene = ExtResource("3_akci0")
 _camera = NodePath("Camera2D")
 _projectiles_container = NodePath("ProjectilesContainer")
 _input_synchronizer = NodePath("InputSynchronizer")
+_player_bodies = {
+"ARCHER": NodePath("PlayerBodyContainer/Archer"),
+"WARRIOR": NodePath("PlayerBodyContainer/Warrior")
+}
 player_name = "John"
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -62,12 +70,21 @@ _mouse_position_finder = NodePath("MousePositionFinder")
 
 [node name="MousePositionFinder" type="Node2D" parent="InputSynchronizer"]
 
+[node name="PlayerBodyContainer" type="Node2D" parent="."]
+
+[node name="Warrior" parent="PlayerBodyContainer" instance=ExtResource("2_m5ir0")]
+
+[node name="Archer" parent="PlayerBodyContainer" instance=ExtResource("3_akci0")]
+scale = Vector2(1, 1)
+
 [node name="ProjectilesContainer" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_enabled = true
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+[node name="ProjectileSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://source/characters/archer/arrow.tscn")
 spawn_path = NodePath("../ProjectilesContainer")
 spawn_limit = 100
+
+[node name="SpawnProtectionTimer" type="Timer" parent="."]

@@ -159,7 +159,7 @@ height = 63.9999
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h8tdm"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
-properties/0/replication_mode = 1
+properties/0/replication_mode = 2
 properties/1/path = NodePath("Sprites:scale")
 properties/1/spawn = true
 properties/1/replication_mode = 0
@@ -195,13 +195,11 @@ libraries = {
 
 [node name="NavigationHitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, 32)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ra4dr")
 
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="ArcherSprites" type="Sprite2D" parent="Sprites"]
-visible = false
 texture = ExtResource("6_2wgfu")
 hframes = 8
 vframes = 7
@@ -213,6 +211,7 @@ hframes = 7
 vframes = 2
 
 [node name="ArcherSeparatedSprites" type="Node2D" parent="Sprites"]
+visible = false
 
 [node name="ArcherBodySprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites"]
 rotation = -0.00152653

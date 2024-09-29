@@ -5,10 +5,10 @@ extends PlayerBody2D
 @export var _death_sprites: Sprite2D
 @export var _warrior_sprites: Sprite2D
 
-@export var dash_speed: int =  700
-@export var max_dash_frames: int = 5
-@export var state = states.IDLE
-@export var death_animation_finished = false
+@export var dash_speed :=  700
+@export var max_dash_frames := 5
+@export var state := states.IDLE
+@export var death_animation_finished := false
 
 enum states {IDLE, WALKING, ATTACKING, DASHING, DEAD}
 # Stringed Enum's aren't a thing yet :(
@@ -21,7 +21,7 @@ const animations = {
 	DIE = "die",
 }
 
-var total_dash_frames = 0
+var total_dash_frames := 0
 
 
 func setup(
@@ -43,6 +43,9 @@ func _ready() -> void:
 
 
 func _physics_process(_delta) -> void:
+	if not input_synchronizer:
+		return
+
 	match state:
 		states.IDLE:
 			if input_synchronizer.attack:
@@ -142,6 +145,9 @@ func _die():
 
 
 func _set_player_state_to_dead():
+	if not killable:
+		return
+
 	state = states.DEAD
 
 

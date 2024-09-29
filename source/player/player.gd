@@ -2,12 +2,11 @@ extends Node2D
 
 signal player_areas_hit_from_player(attacker: String, player_areas: Array[Area2D])
 
-@export var _warrior_scene: PackedScene
-@export var _archer_scene: PackedScene
-
 @export var _camera: Camera2D
 @export var _projectiles_container: Node2D
 @export var _input_synchronizer: MultiplayerSynchronizer
+@export var _player_bodies = {}
+
 @export var player_name: String
 @export var player_body_spawn_position: Vector2
 @export var player_id: int:
@@ -15,13 +14,11 @@ signal player_areas_hit_from_player(attacker: String, player_areas: Array[Area2D
 		player_id = new_player_id
 		_input_synchronizer.set_multiplayer_authority(new_player_id)
 
-enum characters {
-	WARRIOR,
-	ARCHER
+const characters = {
+	WARRIOR = "WARRIOR",
+	ARCHER = "ARCHER"
 }
-var character := characters.WARRIOR
-var player_body: PlayerBody2D = null
-var characters_scenes: Array[PackedScene]
+var current_player_body: PlayerBody2D = null
 # Dict[StringName, Array[Area2D]]
 var hitboxes_with_hittable_player_areas = {}
 
@@ -35,54 +32,62 @@ func setup(
 
 
 func _ready() -> void:
-	_allocate_scenes()
-	_spawn_player_body()
+	_setup_player_bodies()
+	switch_character(characters.ARCHER)
 
 	if _input_synchronizer.is_multiplayer_authority():
 		_camera.make_current()
 
 
 func _process(_delta: float) -> void:
-	_camera.position = player_body.position
+	_camera.position = current_player_body.position
+
+	if _input_synchronizer.switch_character_one:
+		switch_character(characters.WARRIOR)
+	elif _input_synchronizer.switch_character_two:
+		switch_character(characters.ARCHER)
 
 
-func switch_character(character_selection: characters):
-	character = character_selection
-	_spawn_player_body()
+func switch_character(character_selection: String):
+	if get_node(_player_bodies[character_selection]) == current_player_body:
+		return
+
+	for player_body_key in _player_bodies:
+		var player_body = get_node(_player_bodies[player_body_key])
+		player_body.process_mode = Node.PROCESS_MODE_DISABLED
+		player_body.hide()
+
+	var previous_player_body_position = player_body_spawn_position
+	if current_player_body:
+		previous_player_body_position = current_player_body.position
+
+	current_player_body = get_node(_player_bodies[character_selection])
+	current_player_body.process_mode = Node.PROCESS_MODE_PAUSABLE
+	current_player_body.position = previous_player_body_position
+	current_player_body.show()
 
 
-func _allocate_scenes():
-	characters_scenes = [
-		_warrior_scene,
-		_archer_scene
-	]
+func _setup_player_bodies(spawn_position := player_body_spawn_position):
+	for player_body_key in _player_bodies:
+		var player_body = get_node(_player_bodies[player_body_key])
+		player_body.setup(
+			_input_synchronizer,
+			spawn_position
+		)
 
-
-func _spawn_player_body():
-	if player_body:
-		player_body.queue_free()
-
-	player_body = characters_scenes[character].instantiate()
-	player_body.setup(
-		_input_synchronizer,
-		player_body_spawn_position
-	)
-
-	# Prevent puppets from having a signal handler. We want the host to run most logic.
-	if is_multiplayer_authority():
-		player_body.player_areas_hit.connect(_on_player_areas_hit)
-		player_body.player_body_dead.connect(_on_player_body_dead)
-		player_body.create_projectile.connect(_on_create_projectile)
-		player_body.player_area_entered.connect(_on_player_area_entered)
-		player_body.player_area_exited.connect(_on_player_area_exited)
-
-	add_child(player_body)
+		# Prevent puppets from having a signal handler. We want the host to run most logic.
+		if is_multiplayer_authority():
+			player_body.player_areas_hit.connect(_on_player_areas_hit)
+			player_body.player_body_dead.connect(_on_player_body_dead)
+			player_body.create_projectile.connect(_on_create_projectile)
+			player_body.player_area_entered.connect(_on_player_area_entered)
+			player_body.player_area_exited.connect(_on_player_area_exited)
 
 
 func _respawn_player_body():
-	player_body.hide()
-	player_body.reset_player_body(player_body_spawn_position)
-	player_body.show()
+	current_player_body.hide()
+	current_player_body.reset_player_body(player_body_spawn_position)
+	current_player_body.show()
 
 
 func _on_player_body_dead():
@@ -90,7 +95,7 @@ func _on_player_body_dead():
 
 
 func _on_player_area_entered(area: Area2D, hitbox_name: String) -> void:
-	if area == player_body.player_body_area:
+	if area == current_player_body.player_body_area:
 		return
 
 	if not hitboxes_with_hittable_player_areas.has(hitbox_name):
@@ -126,7 +131,7 @@ func _on_create_projectile(projectile: Area2D, spawn_position: Vector2, target_p
 
 
 func _on_projectile_area_entered(area: Area2D):
-	if area == player_body.player_body_area:
+	if area == current_player_body.player_body_area:
 		return
 
 	var areas: Array[Area2D] = [area]

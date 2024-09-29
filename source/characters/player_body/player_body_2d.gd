@@ -15,6 +15,7 @@ signal create_projectile(projectile: Node2D, spawn_position: Vector2, target_pos
 @export var player_body_area: Area2D
 
 var input_synchronizer: MultiplayerSynchronizer
+var killable := true
 
 const SCALE_NORMAL := 1
 const SCALE_REVERSED := -1
@@ -22,11 +23,6 @@ const AXIS_NEUTRAL := 0
 
 
 func _ready() -> void:
-	if not input_synchronizer:
-		set_physics_process(false)
-		set_process_input(false)
-		set_process(false)
-
 	if hitboxes_container:
 		for hitbox in hitboxes_container.hitboxes:
 			hitbox.area_entered.connect(_on_player_area_entered.bind(hitbox.name))
