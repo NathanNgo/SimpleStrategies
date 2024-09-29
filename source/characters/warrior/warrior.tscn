@@ -257,6 +257,12 @@ libraries = {
 }
 script = ExtResource("2_pf2e4")
 
+[node name="NavigationHitbox" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, 32)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_ra4dr")
+
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="WarriorSprites" type="Sprite2D" parent="Sprites"]
@@ -271,11 +277,6 @@ texture = ExtResource("4_eh6nl")
 hframes = 7
 vframes = 2
 
-[node name="NavigationHitbox" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 32)
-shape = SubResource("RectangleShape2D_ra4dr")
-
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
 visible = false
 position = Vector2(0, 32)
@@ -283,14 +284,12 @@ script = ExtResource("4_qw0i4")
 hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2")]
 
 [node name="BodyHitbox" type="Area2D" parent="Hitboxes"]
-scale = Vector2(1, 1)
 collision_layer = 6
 collision_mask = 0
 script = ExtResource("6_x51bo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/BodyHitbox"]
 position = Vector2(0.00915917, -26)
-scale = Vector2(1, 1)
 shape = SubResource("CapsuleShape2D_gtgik")
 
 [node name="DownHitbox1" type="Area2D" parent="Hitboxes"]

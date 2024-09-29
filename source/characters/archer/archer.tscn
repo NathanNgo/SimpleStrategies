@@ -149,12 +149,12 @@ _data = {
 "walk": SubResource("Animation_aiwkm")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
+size = Vector2(40, 16)
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6mx4l"]
 radius = 24.0
 height = 63.9999
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ra4dr"]
-size = Vector2(40, 16)
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h8tdm"]
 properties/0/path = NodePath(".:position")
@@ -193,6 +193,11 @@ libraries = {
 "": SubResource("AnimationLibrary_4rae1")
 }
 
+[node name="NavigationHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 32)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_ra4dr")
+
 [node name="Sprites" type="Node2D" parent="."]
 
 [node name="ArcherSprites" type="Sprite2D" parent="Sprites"]
@@ -226,7 +231,6 @@ vframes = 2
 frame = 8
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
-scale = Vector2(1, 1)
 script = ExtResource("7_ltp0r")
 hitboxes = [NodePath("BodyHitbox")]
 
@@ -238,10 +242,6 @@ script = ExtResource("7_3pks7")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitboxes/BodyHitbox"]
 position = Vector2(0.0122122, 7.99999)
 shape = SubResource("CapsuleShape2D_6mx4l")
-
-[node name="BodyHitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 32)
-shape = SubResource("RectangleShape2D_ra4dr")
 
 [node name="PlayerBodySynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_h8tdm")

@@ -116,7 +116,7 @@ func _on_player_areas_hit(hitbox_name: String) -> void:
 		player_areas_hit_from_player.emit(player_name, hitboxes_with_hittable_player_areas[hitbox_name])
 
 
-func _on_create_projectile(projectile: Node2D, spawn_position: Vector2, target_position: Vector2):
+func _on_create_projectile(projectile: Area2D, spawn_position: Vector2, target_position: Vector2):
 	_projectiles_container.add_child(projectile, true)
 	projectile.setup(
 		spawn_position,
@@ -129,6 +129,5 @@ func _on_projectile_area_entered(area: Area2D):
 	if area == player_body.player_body_area:
 		return
 
-	var areas: Array[Area2D] = []
-	areas.append(area)
+	var areas: Array[Area2D] = [area]
 	player_areas_hit_from_player.emit(player_name, areas)
