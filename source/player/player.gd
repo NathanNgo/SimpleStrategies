@@ -33,17 +33,25 @@ func setup(
 
 func _ready() -> void:
 	_setup_player_bodies()
-	switch_character(characters.ARCHER)
+
+	if is_multiplayer_authority():
+		switch_character(characters.ARCHER)
 
 	if _input_synchronizer.is_multiplayer_authority():
 		_camera.make_current()
 
 
 func _process(_delta: float) -> void:
+	if not is_multiplayer_authority():
+		return
+
 	_camera.position = current_player_body.position
 
 
 func _physics_process(_delta: float) -> void:
+	if not is_multiplayer_authority():
+		return
+
 	if _input_synchronizer.switch_character_one:
 		switch_character(characters.WARRIOR)
 	elif _input_synchronizer.switch_character_two:

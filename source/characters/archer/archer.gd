@@ -45,11 +45,16 @@ func _ready() -> void:
 	_show_archer_separated_sprites(false)
 
 	_animation_player.animation_finished.connect(_on_animation_finished)
-	player_body_area.player_area_hit.connect(_on_player_area_hit)
+
+	if is_multiplayer_authority():
+		player_body_area.player_area_hit.connect(_on_player_area_hit)
 
 
 func _physics_process(_delta) -> void:
 	if not input_synchronizer:
+		return
+
+	if not is_multiplayer_authority():
 		return
 
 	match state:
@@ -178,11 +183,14 @@ func _on_animation_finished(animation_name: String) -> void:
 	match animation_name:
 		animations.DIE:
 			death_animation_finished = true
+			hide()
 		animations.BOW_CHARGING:
 			bow_completely_charged = true
+			_animation_player.play(animations.BOW_CHARGED)
 		animations.BOW_RELEASING:
 			bow_completely_released = true
 			bow_reset = false
+			_animation_player.play(animations.IDLE)
 
 
 func set_scale_normal(is_normal=true) -> void:

@@ -15,32 +15,35 @@ properties/1/replication_mode = 0
 properties/2/path = NodePath(".:player_body_spawn_position")
 properties/2/spawn = true
 properties/2/replication_mode = 2
+properties/3/path = NodePath("Camera2D:position")
+properties/3/spawn = true
+properties/3/replication_mode = 2
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
 properties/0/path = NodePath("InputSynchronizer:attack")
 properties/0/spawn = true
-properties/0/replication_mode = 2
+properties/0/replication_mode = 1
 properties/1/path = NodePath("InputSynchronizer:move_left")
 properties/1/spawn = true
-properties/1/replication_mode = 2
+properties/1/replication_mode = 1
 properties/2/path = NodePath("InputSynchronizer:move_right")
 properties/2/spawn = true
-properties/2/replication_mode = 2
+properties/2/replication_mode = 1
 properties/3/path = NodePath("InputSynchronizer:move_up")
 properties/3/spawn = true
-properties/3/replication_mode = 2
+properties/3/replication_mode = 1
 properties/4/path = NodePath("InputSynchronizer:move_down")
 properties/4/spawn = true
-properties/4/replication_mode = 2
+properties/4/replication_mode = 1
 properties/5/path = NodePath("InputSynchronizer:dash")
 properties/5/spawn = true
 properties/5/replication_mode = 2
 properties/6/path = NodePath("InputSynchronizer:direction")
 properties/6/spawn = true
-properties/6/replication_mode = 2
+properties/6/replication_mode = 1
 properties/7/path = NodePath("InputSynchronizer:mouse_position")
 properties/7/spawn = true
-properties/7/replication_mode = 2
+properties/7/replication_mode = 1
 properties/8/path = NodePath("InputSynchronizer:switch_character_one")
 properties/8/spawn = true
 properties/8/replication_mode = 2
@@ -76,6 +79,7 @@ y_sort_enabled = true
 [node name="Warrior" parent="PlayerBodyContainer" instance=ExtResource("2_m5ir0")]
 
 [node name="Archer" parent="PlayerBodyContainer" instance=ExtResource("3_akci0")]
+visible = true
 
 [node name="ProjectilesContainer" type="Node2D" parent="."]
 

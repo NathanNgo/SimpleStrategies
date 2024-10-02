@@ -23,6 +23,9 @@ const AXIS_NEUTRAL := 0
 
 
 func _ready() -> void:
+	if not is_multiplayer_authority():
+		return
+
 	if hitboxes_container:
 		for hitbox in hitboxes_container.hitboxes:
 			hitbox.area_entered.connect(_on_player_area_entered.bind(hitbox.name))
@@ -30,9 +33,6 @@ func _ready() -> void:
 
 
 func move_player_body(speed: int, set_scale_normal: Callable) -> void:
-	if not is_multiplayer_authority():
-		return
-
 	var direction = Vector2.ZERO
 
 	direction = input_synchronizer.direction
