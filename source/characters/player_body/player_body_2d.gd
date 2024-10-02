@@ -30,6 +30,9 @@ func _ready() -> void:
 
 
 func move_player_body(speed: int, set_scale_normal: Callable) -> void:
+	if not is_multiplayer_authority():
+		return
+
 	var direction = Vector2.ZERO
 
 	direction = input_synchronizer.direction

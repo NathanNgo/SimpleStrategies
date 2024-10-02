@@ -42,6 +42,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_camera.position = current_player_body.position
 
+
+func _physics_process(_delta: float) -> void:
 	if _input_synchronizer.switch_character_one:
 		switch_character(characters.WARRIOR)
 	elif _input_synchronizer.switch_character_two:
