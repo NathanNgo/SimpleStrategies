@@ -71,11 +71,11 @@ _mouse_position_finder = NodePath("MousePositionFinder")
 [node name="MousePositionFinder" type="Node2D" parent="InputSynchronizer"]
 
 [node name="PlayerBodyContainer" type="Node2D" parent="."]
+y_sort_enabled = true
 
 [node name="Warrior" parent="PlayerBodyContainer" instance=ExtResource("2_m5ir0")]
 
 [node name="Archer" parent="PlayerBodyContainer" instance=ExtResource("3_akci0")]
-scale = Vector2(1, 1)
 
 [node name="ProjectilesContainer" type="Node2D" parent="."]
 
