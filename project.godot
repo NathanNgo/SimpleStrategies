@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 MultiplayerLobby="*res://source/multiplayer/multiplayer_lobby.tscn"
+MultiplayerLogger="*res://source/logging/multiplayer_logger.gd"
 
 [display]
 

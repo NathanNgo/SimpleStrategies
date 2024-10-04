@@ -20,7 +20,6 @@ func create_player(peer_id: int):
 
 	var spawn_point = _player_spawn_points[total_number_of_players % len(_player_spawn_points)]
 	
-
 	var player = _player_scene.instantiate()
 	player.setup(
 		peer_id,
