@@ -1,10 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqd2hxm6l3n6x"]
+[gd_scene load_steps=5 format=3 uid="uid://dqd2hxm6l3n6x"]
 
 [ext_resource type="Script" path="res://source/levels/level_arena/level_arena.gd" id="1_7s657"]
 [ext_resource type="PackedScene" uid="uid://th5a5353c0q0" path="res://source/player/player.tscn" id="2_ugal2"]
 [ext_resource type="PackedScene" uid="uid://cokb2q5ky857y" path="res://source/levels/level_arena/map/map.tscn" id="3_xp6ot"]
+[ext_resource type="PackedScene" uid="uid://crgkfpyuuyip" path="res://source/objective_items/tree.tscn" id="4_l7sth"]
 
 [node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_players", "_player_spawn_points")]
+y_sort_enabled = true
 script = ExtResource("1_7s657")
 _player_scene = ExtResource("2_ugal2")
 _players = NodePath("Players")
@@ -29,3 +31,6 @@ spawn_limit = 30
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(3488, 2880)
+
+[node name="Tree" parent="." instance=ExtResource("4_l7sth")]
+position = Vector2(3488, 2912)

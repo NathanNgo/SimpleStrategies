@@ -283,8 +283,7 @@ libraries = {
 script = ExtResource("2_pf2e4")
 
 [node name="NavigationHitbox" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 32)
+position = Vector2(0, -5.42101e-20)
 shape = SubResource("RectangleShape2D_ra4dr")
 
 [node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
@@ -292,8 +291,10 @@ script = ExtResource("4_lv2yf")
 sprites = [NodePath("WarriorSprites")]
 
 [node name="WarriorSprites" type="Sprite2D" parent="Sprites"]
+position = Vector2(-7.45058e-09, -3.8147e-06)
 rotation = -0.00152653
 texture = ExtResource("2_uhed5")
+offset = Vector2(0, -32)
 hframes = 6
 vframes = 8
 script = ExtResource("5_sqpux")
@@ -306,8 +307,7 @@ hframes = 7
 vframes = 2
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
-visible = false
-position = Vector2(0, 32)
+position = Vector2(0, -3.8147e-06)
 script = ExtResource("4_qw0i4")
 hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2"), NodePath("BodyHitbox")]
 
@@ -321,6 +321,7 @@ position = Vector2(0.00915917, -26)
 shape = SubResource("CapsuleShape2D_gtgik")
 
 [node name="DownHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2
@@ -356,6 +357,7 @@ collision_mask = 2
 polygon = PackedVector2Array(-27.9389, 40.0427, -27.9252, 49.0427, -27.8992, 66.0427, 4.10075, 65.9938, 29.0916, 59.9557, 64.0457, 29.9023, 75.0167, 10.8855, 84.9892, -7.12975, 84.9587, -27.1297, 83.9389, -40.1282, 48.9725, -18.0748, 20.003, 1.96947, 5.02595, 16.9923)
 
 [node name="UpHitbox1" type="Area2D" parent="Hitboxes"]
+visible = false
 position = Vector2(0, -32)
 collision_layer = 0
 collision_mask = 2

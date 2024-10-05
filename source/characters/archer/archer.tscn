@@ -203,7 +203,7 @@ libraries = {
 }
 
 [node name="NavigationHitbox" type="CollisionShape2D" parent="."]
-position = Vector2(0, 32)
+position = Vector2(0, -3.8147e-06)
 shape = SubResource("RectangleShape2D_ra4dr")
 
 [node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
@@ -211,7 +211,9 @@ script = ExtResource("4_16ld1")
 sprites = [NodePath("ArcherSprites"), NodePath("ArcherSeparatedSprites/ArcherBodySprites"), NodePath("ArcherSeparatedSprites/BowPivot/BowSprites")]
 
 [node name="ArcherSprites" type="Sprite2D" parent="Sprites"]
+position = Vector2(-1.86265e-09, -9.53674e-07)
 texture = ExtResource("6_2wgfu")
+offset = Vector2(0, -32)
 hframes = 8
 vframes = 7
 script = ExtResource("5_omhwb")
@@ -224,29 +226,30 @@ hframes = 7
 vframes = 2
 
 [node name="ArcherSeparatedSprites" type="Node2D" parent="Sprites"]
-visible = false
 
 [node name="ArcherBodySprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites"]
 rotation = -0.00152653
 texture = ExtResource("3_my82u")
+offset = Vector2(0, -32)
 hframes = 6
 vframes = 2
 script = ExtResource("5_omhwb")
 _sprites = Array[Resource]([ExtResource("3_my82u"), ExtResource("8_8dkni")])
 
 [node name="BowPivot" type="Node2D" parent="Sprites/ArcherSeparatedSprites"]
-position = Vector2(0.0152653, 9.99999)
+position = Vector2(0, -22)
 
 [node name="BowSprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites/BowPivot"]
-position = Vector2(-0.0152653, -9.99999)
+position = Vector2(0, -10)
 texture = ExtResource("3_cyl8l")
 hframes = 8
 vframes = 2
-frame = 8
+frame = 12
 script = ExtResource("5_omhwb")
 _sprites = Array[Resource]([ExtResource("3_cyl8l"), ExtResource("10_7r3y7")])
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
+position = Vector2(-0.0488489, -32)
 script = ExtResource("7_ltp0r")
 hitboxes = [NodePath("BodyHitbox")]
 
