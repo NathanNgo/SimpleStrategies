@@ -11,9 +11,9 @@ func _ready() -> void:
 	MultiplayerLobby.player_connected.connect(_on_player_connected)
 
 
-func _on_other_player_areas_hit_from_player(attacker_player_id: int, player_areas: Array[Area2D]) -> void:
+func _on_other_player_areas_hit_from_player(attacker_player_id: int, player_areas: Array[Area2D], is_projectile: bool) -> void:
 	for player_area in player_areas:
-		player_area.hit(attacker_player_id)
+		player_area.hit(attacker_player_id, is_projectile)
 
 
 func create_player(peer_id: int):

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://source/levels/level_arena/level_arena.gd" id="1_7s657"]
 [ext_resource type="PackedScene" uid="uid://th5a5353c0q0" path="res://source/player/player.tscn" id="2_ugal2"]
 [ext_resource type="PackedScene" uid="uid://cokb2q5ky857y" path="res://source/levels/level_arena/map/map.tscn" id="3_xp6ot"]
-[ext_resource type="PackedScene" uid="uid://crgkfpyuuyip" path="res://source/objective_items/tree.tscn" id="4_l7sth"]
+[ext_resource type="PackedScene" uid="uid://crgkfpyuuyip" path="res://source/objective_items/tree/tree.tscn" id="4_l7sth"]
 
 [node name="LevelArena" type="Node2D" node_paths=PackedStringArray("_players", "_player_spawn_points")]
 y_sort_enabled = true

@@ -226,6 +226,7 @@ hframes = 7
 vframes = 2
 
 [node name="ArcherSeparatedSprites" type="Node2D" parent="Sprites"]
+visible = false
 
 [node name="ArcherBodySprites" type="Sprite2D" parent="Sprites/ArcherSeparatedSprites"]
 rotation = -0.00152653
@@ -249,7 +250,8 @@ script = ExtResource("5_omhwb")
 _sprites = Array[Resource]([ExtResource("3_cyl8l"), ExtResource("10_7r3y7")])
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
-position = Vector2(-0.0488489, -32)
+position = Vector2(-0.048849, -32)
+scale = Vector2(1, 1)
 script = ExtResource("7_ltp0r")
 hitboxes = [NodePath("BodyHitbox")]
 

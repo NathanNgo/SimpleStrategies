@@ -1,0 +1,140 @@
+[gd_scene load_steps=12 format=3 uid="uid://crgkfpyuuyip"]
+
+[ext_resource type="Script" path="res://source/objective_items/tree/tree.gd" id="1_2ix33"]
+[ext_resource type="Texture2D" uid="uid://4e2k6yydqv61" path="res://assets/Resources/Trees/Tree.png" id="1_htgnl"]
+[ext_resource type="Script" path="res://source/objective_items/objective_area.gd" id="3_ecupt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tflww"]
+size = Vector2(32, 16)
+
+[sub_resource type="Animation" id="Animation_yc620"]
+resource_name = "idle"
+length = 0.40001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TreeSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_74xt2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TreeSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("TreeSprites:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2i(0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_ncvla"]
+resource_name = "hit"
+length = 0.20001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TreeSprites:frame_coords")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 1), Vector2i(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5kjuk"]
+resource_name = "cut"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TreeSprites:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2ofb1"]
+_data = {
+"RESET": SubResource("Animation_74xt2"),
+"cut": SubResource("Animation_5kjuk"),
+"hit": SubResource("Animation_ncvla"),
+"idle": SubResource("Animation_yc620")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_34dmq"]
+radius = 16.0
+height = 48.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w87bk"]
+properties/0/path = NodePath("AnimationPlayer:active")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("AnimationPlayer:current_animation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[node name="Tree" type="Node2D" node_paths=PackedStringArray("_animation_player", "_tree_area")]
+y_sort_enabled = true
+script = ExtResource("1_2ix33")
+_animation_player = NodePath("AnimationPlayer")
+_tree_area = NodePath("ObjectiveArea")
+
+[node name="NavigationBody" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NavigationBody"]
+shape = SubResource("RectangleShape2D_tflww")
+
+[node name="TreeSprites" type="Sprite2D" parent="."]
+texture = ExtResource("1_htgnl")
+offset = Vector2(0, -72)
+hframes = 4
+vframes = 3
+frame = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_2ofb1")
+}
+
+[node name="ObjectiveArea" type="Area2D" parent="."]
+collision_layer = 6
+collision_mask = 0
+script = ExtResource("3_ecupt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ObjectiveArea"]
+position = Vector2(0, -16)
+shape = SubResource("CapsuleShape2D_34dmq")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_w87bk")

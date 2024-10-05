@@ -1,6 +1,6 @@
 extends Node2D
 
-signal other_player_areas_hit_from_player(attacker_player_id: int, player_areas: Array[Area2D])
+signal other_player_areas_hit_from_player(attacker_player_id: int, player_areas: Array[Area2D], is_projectile: bool)
 
 @export var _camera: Camera2D
 @export var _projectiles_container: Node2D
@@ -66,25 +66,29 @@ func _physics_process(_delta: float) -> void:
 
 
 func switch_character(character_selection: String) -> void:
-	if get_node(_player_bodies[character_selection]) == current_player_body:
+	if get_player_body(character_selection) == current_player_body:
 		return
 
 	if not current_player_body:
-		current_player_body = get_node(_player_bodies[character_selection])
+		current_player_body = get_player_body(character_selection)
 
 	if current_player_body.state == current_player_body.states.DEAD:
 		return
 
 	for player_body_key in _player_bodies:
-		var player_body = get_node(_player_bodies[player_body_key])
+		var player_body = get_player_body(player_body_key)
 		player_body.process_mode = Node.PROCESS_MODE_DISABLED
 		player_body.hide()
 
 	var previous_player_body_position = current_player_body.position
-	current_player_body = get_node(_player_bodies[character_selection])
+	current_player_body = get_player_body(character_selection)
 	current_player_body.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_player_body.position = previous_player_body_position
 	current_player_body.show()
+
+
+func get_player_body(character_selection: String):
+	return get_node(_player_bodies[character_selection])
 
 
 func _setup_player_bodies(spawn_position := player_body_spawn_position) -> void:
@@ -142,7 +146,7 @@ func _on_other_player_area_exited(area: Area2D, hitbox_name: String) -> void:
 
 func _on_other_player_areas_hit(hitbox_name: String) -> void:
 	if hitboxes_with_hittable_player_areas.has(hitbox_name):
-		other_player_areas_hit_from_player.emit(player_id, hitboxes_with_hittable_player_areas[hitbox_name])
+		other_player_areas_hit_from_player.emit(player_id, hitboxes_with_hittable_player_areas[hitbox_name], false)
 
 
 func _on_create_projectile(projectile: Area2D, spawn_position: Vector2, target_position: Vector2) -> void:
@@ -159,7 +163,7 @@ func _on_projectile_other_area_entered(area: Area2D) -> void:
 		return
 
 	var areas: Array[Area2D] = [area]
-	other_player_areas_hit_from_player.emit(player_id, areas)
+	other_player_areas_hit_from_player.emit(player_id, areas, true)
 
 
 func _on_spawn_protection_timer_timeout() -> void:
