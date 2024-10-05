@@ -1,13 +1,18 @@
-[gd_scene load_steps=20 format=3 uid="uid://g3us0p5v2s8h"]
+[gd_scene load_steps=25 format=3 uid="uid://g3us0p5v2s8h"]
 
 [ext_resource type="Script" path="res://source/characters/archer/archer.gd" id="1_dij1d"]
 [ext_resource type="PackedScene" uid="uid://dgjw21g2hxlcg" path="res://source/characters/archer/arrow.tscn" id="2_jugn6"]
 [ext_resource type="Texture2D" uid="uid://c1acg6ul4svqy" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Bow_Blue.png" id="3_cyl8l"]
 [ext_resource type="Texture2D" uid="uid://bhf7ryc2ms8ps" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Blue_(NoArms).png" id="3_my82u"]
+[ext_resource type="Script" path="res://source/characters/player_body/sprites.gd" id="4_16ld1"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
+[ext_resource type="Texture2D" uid="uid://cl4ip45t5sy33" path="res://assets/Factions/Knights/Troops/Archer/Red/Archer_Red.png" id="5_a24fy"]
+[ext_resource type="Script" path="res://source/characters/player_body/sprite_options.gd" id="5_omhwb"]
 [ext_resource type="Texture2D" uid="uid://d3dvcng3l04v" path="res://assets/Factions/Knights/Troops/Archer/Blue/Archer_Blue.png" id="6_2wgfu"]
 [ext_resource type="Script" path="res://source/characters/player_body/player_area.gd" id="7_3pks7"]
 [ext_resource type="Script" path="res://source/characters/player_body/hitboxes.gd" id="7_ltp0r"]
+[ext_resource type="Texture2D" uid="uid://d32exnglg2kk" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Red_(NoArms).png" id="8_8dkni"]
+[ext_resource type="Texture2D" uid="uid://biosjwxi5k0x2" path="res://assets/Factions/Knights/Troops/Archer/Archer + Bow/Archer_Bow_Red.png" id="10_7r3y7"]
 
 [sub_resource type="Animation" id="Animation_bh0aq"]
 length = 0.001
@@ -176,8 +181,7 @@ properties/13/path = NodePath("Sprites/DeathSprites:visible")
 properties/13/spawn = true
 properties/13/replication_mode = 2
 
-[node name="Archer" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_archer_separated_sprites", "_archer_sprites", "_death_sprites", "_bow_pivot", "hitboxes_container", "player_body_area")]
-visible = false
+[node name="Archer" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_archer_separated_sprites", "_archer_sprites", "_death_sprites", "_bow_pivot", "hitboxes_container", "player_body_area", "sprites_container")]
 y_sort_enabled = true
 rotation = 0.00152653
 collision_layer = 7
@@ -191,6 +195,7 @@ _bow_pivot = NodePath("Sprites/ArcherSeparatedSprites/BowPivot")
 _arrow_scene = ExtResource("2_jugn6")
 hitboxes_container = NodePath("Hitboxes")
 player_body_area = NodePath("Hitboxes/BodyHitbox")
+sprites_container = NodePath("Sprites")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -201,12 +206,16 @@ libraries = {
 position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_ra4dr")
 
-[node name="Sprites" type="Node2D" parent="."]
+[node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
+script = ExtResource("4_16ld1")
+sprites = [NodePath("ArcherSprites"), NodePath("ArcherSeparatedSprites/ArcherBodySprites"), NodePath("ArcherSeparatedSprites/BowPivot/BowSprites")]
 
 [node name="ArcherSprites" type="Sprite2D" parent="Sprites"]
 texture = ExtResource("6_2wgfu")
 hframes = 8
 vframes = 7
+script = ExtResource("5_omhwb")
+_sprites = Array[Resource]([ExtResource("6_2wgfu"), ExtResource("5_a24fy")])
 
 [node name="DeathSprites" type="Sprite2D" parent="Sprites"]
 visible = false
@@ -222,6 +231,8 @@ rotation = -0.00152653
 texture = ExtResource("3_my82u")
 hframes = 6
 vframes = 2
+script = ExtResource("5_omhwb")
+_sprites = Array[Resource]([ExtResource("3_my82u"), ExtResource("8_8dkni")])
 
 [node name="BowPivot" type="Node2D" parent="Sprites/ArcherSeparatedSprites"]
 position = Vector2(0.0152653, 9.99999)
@@ -232,6 +243,8 @@ texture = ExtResource("3_cyl8l")
 hframes = 8
 vframes = 2
 frame = 8
+script = ExtResource("5_omhwb")
+_sprites = Array[Resource]([ExtResource("3_cyl8l"), ExtResource("10_7r3y7")])
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
 script = ExtResource("7_ltp0r")

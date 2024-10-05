@@ -1,10 +1,13 @@
-[gd_scene load_steps=18 format=3 uid="uid://cwowgatou4rs2"]
+[gd_scene load_steps=21 format=3 uid="uid://cwowgatou4rs2"]
 
 [ext_resource type="Script" path="res://source/characters/warrior/warrior.gd" id="1_dr5k8"]
 [ext_resource type="Script" path="res://source/characters/player_body/animation_player.gd" id="2_pf2e4"]
 [ext_resource type="Texture2D" uid="uid://b471ilnxuytxp" path="res://assets/Factions/Knights/Troops/Warrior/Blue/Warrior_Blue.png" id="2_uhed5"]
 [ext_resource type="Texture2D" uid="uid://vubkc3emgblt" path="res://assets/Factions/Knights/Troops/Dead/Dead.png" id="4_eh6nl"]
+[ext_resource type="Script" path="res://source/characters/player_body/sprites.gd" id="4_lv2yf"]
 [ext_resource type="Script" path="res://source/characters/player_body/hitboxes.gd" id="4_qw0i4"]
+[ext_resource type="Script" path="res://source/characters/player_body/sprite_options.gd" id="5_sqpux"]
+[ext_resource type="Texture2D" uid="uid://wm20pdwrenxs" path="res://assets/Factions/Knights/Troops/Warrior/Red/Warrior_Red.png" id="5_uvcki"]
 [ext_resource type="Script" path="res://source/characters/player_body/player_area.gd" id="6_x51bo"]
 
 [sub_resource type="Animation" id="Animation_1e117"]
@@ -261,7 +264,7 @@ properties/11/path = NodePath("AnimationPlayer:current_animation")
 properties/11/spawn = true
 properties/11/replication_mode = 2
 
-[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "hitboxes_container", "player_body_area")]
+[node name="Warrior" type="CharacterBody2D" node_paths=PackedStringArray("_animation_player", "_sprites", "_death_sprites", "_warrior_sprites", "hitboxes_container", "player_body_area", "sprites_container")]
 y_sort_enabled = true
 rotation = 0.00152653
 script = ExtResource("1_dr5k8")
@@ -271,6 +274,7 @@ _death_sprites = NodePath("Sprites/DeathSprites")
 _warrior_sprites = NodePath("Sprites/WarriorSprites")
 hitboxes_container = NodePath("Hitboxes")
 player_body_area = NodePath("Hitboxes/BodyHitbox")
+sprites_container = NodePath("Sprites")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -283,13 +287,17 @@ visible = false
 position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_ra4dr")
 
-[node name="Sprites" type="Node2D" parent="."]
+[node name="Sprites" type="Node2D" parent="." node_paths=PackedStringArray("sprites")]
+script = ExtResource("4_lv2yf")
+sprites = [NodePath("WarriorSprites")]
 
 [node name="WarriorSprites" type="Sprite2D" parent="Sprites"]
 rotation = -0.00152653
 texture = ExtResource("2_uhed5")
 hframes = 6
 vframes = 8
+script = ExtResource("5_sqpux")
+_sprites = Array[Resource]([ExtResource("2_uhed5"), ExtResource("5_uvcki")])
 
 [node name="DeathSprites" type="Sprite2D" parent="Sprites"]
 visible = false
@@ -301,7 +309,7 @@ vframes = 2
 visible = false
 position = Vector2(0, 32)
 script = ExtResource("4_qw0i4")
-hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2")]
+hitboxes = [NodePath("DownHitbox1"), NodePath("DownHitbox2"), NodePath("ForwardHitbox1"), NodePath("ForwardHitbox2"), NodePath("UpHitbox1"), NodePath("UpHitbox2"), NodePath("BodyHitbox")]
 
 [node name="BodyHitbox" type="Area2D" parent="Hitboxes"]
 collision_layer = 6

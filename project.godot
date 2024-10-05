@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 
 MultiplayerLobby="*res://source/multiplayer/multiplayer_lobby.tscn"
 MultiplayerLogger="*res://source/logging/multiplayer_logger.gd"
+PlayerRegistry="*res://source/player/player_registry/player_registry.gd"
 
 [display]
 

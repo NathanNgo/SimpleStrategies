@@ -1,7 +1,7 @@
 extends Area2D
 
-signal player_area_hit
+signal player_area_hit(attacker_player_id: int)
 
 
-func hit():
-	player_area_hit.emit()
+func hit(attacker_player_id: int) -> void:
+	player_area_hit.emit(attacker_player_id)

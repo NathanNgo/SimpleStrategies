@@ -18,11 +18,12 @@ properties/2/path = NodePath(".:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Arrow" type="Area2D"]
+[node name="Arrow" type="Area2D" node_paths=PackedStringArray("_timer")]
 z_index = 1
 collision_layer = 0
 collision_mask = 4
 script = ExtResource("1_fur70")
+_timer = NodePath("LifetimeTimer")
 
 [node name="ArrowSprite" type="Sprite2D" parent="."]
 position = Vector2(0, -3)
@@ -35,3 +36,8 @@ shape = SubResource("CapsuleShape2D_qqrxr")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_dw3fw")
+
+[node name="LifetimeTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true

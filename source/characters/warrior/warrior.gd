@@ -24,14 +24,6 @@ const animations = {
 var total_dash_frames := 0
 
 
-func setup(
-	input_synchronizer_: MultiplayerSynchronizer,
-	position_: Vector2,
-):
-	self.input_synchronizer = input_synchronizer_
-	self.position = position_
-	
-
 func _ready() -> void:
 	super._ready()
 
@@ -40,8 +32,7 @@ func _ready() -> void:
 	_animation_player.animation_finished.connect(_on_animation_finished)
 
 	if is_multiplayer_authority():
-		_animation_player.animation_attack.connect(_on_player_areas_hit)
-		player_body_area.player_area_hit.connect(_on_player_area_hit)
+		_animation_player.animation_attack.connect(_on_other_player_areas_hit)
 
 
 func _physics_process(_delta) -> void:
@@ -149,15 +140,11 @@ func _die():
 		player_body_dead.emit()
 
 
-func _set_player_state_to_dead():
+func hit():
 	if not killable:
 		return
 
 	state = states.DEAD
-
-
-func _on_player_area_hit():
-	_set_player_state_to_dead()
 
 
 func _on_animation_finished(animation_name: String) -> void:

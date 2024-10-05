@@ -18,6 +18,9 @@ properties/2/replication_mode = 2
 properties/3/path = NodePath("Camera2D:position")
 properties/3/spawn = true
 properties/3/replication_mode = 2
+properties/4/path = NodePath(".:player_team")
+properties/4/spawn = true
+properties/4/replication_mode = 0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
 properties/0/path = NodePath("InputSynchronizer:attack")
@@ -51,7 +54,7 @@ properties/9/path = NodePath("InputSynchronizer:switch_character_two")
 properties/9/spawn = true
 properties/9/replication_mode = 2
 
-[node name="Player" type="Node2D" node_paths=PackedStringArray("_camera", "_projectiles_container", "_input_synchronizer")]
+[node name="Player" type="Node2D" node_paths=PackedStringArray("_camera", "_projectiles_container", "_input_synchronizer", "_spawn_protection_timer")]
 y_sort_enabled = true
 script = ExtResource("1_6x0rl")
 _camera = NodePath("Camera2D")
@@ -61,6 +64,7 @@ _player_bodies = {
 "ARCHER": NodePath("PlayerBodyContainer/Archer"),
 "WARRIOR": NodePath("PlayerBodyContainer/Warrior")
 }
+_spawn_protection_timer = NodePath("SpawnProtectionTimer")
 player_name = "John"
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -79,7 +83,6 @@ y_sort_enabled = true
 [node name="Warrior" parent="PlayerBodyContainer" instance=ExtResource("2_m5ir0")]
 
 [node name="Archer" parent="PlayerBodyContainer" instance=ExtResource("3_akci0")]
-visible = true
 
 [node name="ProjectilesContainer" type="Node2D" parent="."]
 
@@ -92,3 +95,4 @@ spawn_path = NodePath("../ProjectilesContainer")
 spawn_limit = 100
 
 [node name="SpawnProtectionTimer" type="Timer" parent="."]
+wait_time = 2.0

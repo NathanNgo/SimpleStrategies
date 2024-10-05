@@ -28,14 +28,6 @@ var total_dash_frames := 0
 var bow_reset := false
 var bow_completely_charged := false
 var bow_completely_released := false
-
-
-func setup(
-	input_synchronizer_: MultiplayerSynchronizer,
-	position_: Vector2,
-):
-	self.input_synchronizer = input_synchronizer_
-	self.position = position_
 	
 
 func _ready() -> void:
@@ -45,9 +37,6 @@ func _ready() -> void:
 	_show_archer_separated_sprites(false)
 
 	_animation_player.animation_finished.connect(_on_animation_finished)
-
-	if is_multiplayer_authority():
-		player_body_area.player_area_hit.connect(_on_player_area_hit)
 
 
 func _physics_process(_delta) -> void:
@@ -168,15 +157,11 @@ func _die():
 		player_body_dead.emit()
 
 
-func _set_player_state_to_dead():
+func hit():
 	if not killable:
 		return
 
 	state = states.DEAD
-
-
-func _on_player_area_hit():
-	_set_player_state_to_dead()
 
 
 func _on_animation_finished(animation_name: String) -> void:
@@ -196,8 +181,10 @@ func _on_animation_finished(animation_name: String) -> void:
 func set_scale_normal(is_normal=true) -> void:
 	if is_normal:
 		_sprites.scale.x = SCALE_NORMAL
+		hitboxes_container.scale.x = SCALE_NORMAL
 	else:
 		_sprites.scale.x = SCALE_REVERSED
+		hitboxes_container.scale.x = SCALE_REVERSED
 
 
 func reset_player_body(spawn_position):
