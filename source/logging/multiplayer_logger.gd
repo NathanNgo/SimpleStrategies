@@ -10,7 +10,7 @@ func log(message: String):
 	var peer_id = multiplayer.get_unique_id()
 
 	print(
-		"[Info | Time %d:%d:%d | Peer ID %d | Authority %s] %s" % [
+		"[ Info | Time %d:%d:%d | Peer ID %d | Authority %s ] %s" % [
 			hour, minute, second, peer_id, is_multiplayer_authority(), message
 		]
 	)

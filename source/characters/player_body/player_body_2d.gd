@@ -4,9 +4,9 @@ class_name PlayerBody2D
 
 signal player_moved()
 signal player_body_dead
-signal other_player_area_entered(body: Node2D, hitbox_name: StringName)
-signal other_player_area_exited(body: Node2D, hitbox_name: StringName)
-signal other_player_areas_hit(attacker_player_id: int, hitbox_name: StringName)
+signal other_area_entered(body: Node2D, hitbox_name: StringName)
+signal other_area_exited(body: Node2D, hitbox_name: StringName)
+signal other_areas_hit(attacker_player_id: int, hitbox_name: StringName)
 signal player_area_hit(attacker_player_id: int)
 signal create_projectile(projectile: Node2D, spawn_position: Vector2, target_position: Vector2)
 
@@ -40,8 +40,8 @@ func _ready() -> void:
 
 	if hitboxes_container:
 		for hitbox in hitboxes_container.hitboxes:
-			hitbox.area_entered.connect(_on_other_player_area_entered.bind(hitbox.name))
-			hitbox.area_exited.connect(_on_other_player_area_exited.bind(hitbox.name))
+			hitbox.area_entered.connect(_on_other_area_entered.bind(hitbox.name))
+			hitbox.area_exited.connect(_on_other_area_exited.bind(hitbox.name))
 
 	player_body_area.player_area_hit.connect(_on_player_area_hit)
 	
@@ -81,16 +81,16 @@ func switch_player_body_color(color_selection: int) -> void:
 	sprites_container.switch_all_sprite_colors(color_selection)
 
 
-func _on_other_player_area_entered(area: Area2D, hitbox_name: String) -> void:
-	other_player_area_entered.emit(area, hitbox_name)
+func _on_other_area_entered(area: Area2D, hitbox_name: String) -> void:
+	other_area_entered.emit(area, hitbox_name)
 
 
-func _on_other_player_area_exited(area: Node2D, hitbox_name: StringName) -> void:
-	other_player_area_exited.emit(area, hitbox_name)
+func _on_other_area_exited(area: Node2D, hitbox_name: StringName) -> void:
+	other_area_exited.emit(area, hitbox_name)
 
 
-func _on_other_player_areas_hit(hitbox_name: StringName) -> void:
-	other_player_areas_hit.emit(hitbox_name)
+func _on_other_areas_hit(hitbox_name: StringName) -> void:
+	other_areas_hit.emit(hitbox_name)
 
 
 func _on_player_area_hit(attacker_player_id: int) -> void:

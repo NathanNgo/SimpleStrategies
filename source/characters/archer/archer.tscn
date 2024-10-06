@@ -251,7 +251,6 @@ _sprites = Array[Resource]([ExtResource("3_cyl8l"), ExtResource("10_7r3y7")])
 
 [node name="Hitboxes" type="Node2D" parent="." node_paths=PackedStringArray("hitboxes")]
 position = Vector2(-0.048849, -32)
-scale = Vector2(1, 1)
 script = ExtResource("7_ltp0r")
 hitboxes = [NodePath("BodyHitbox")]
 

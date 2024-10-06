@@ -32,7 +32,7 @@ func _ready() -> void:
 	_animation_player.animation_finished.connect(_on_animation_finished)
 
 	if is_multiplayer_authority():
-		_animation_player.animation_attack.connect(_on_other_player_areas_hit)
+		_animation_player.animation_attack.connect(_on_other_areas_hit)
 
 
 func _physics_process(_delta) -> void:

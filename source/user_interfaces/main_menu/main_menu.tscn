@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://bfsxfr5gt2qmq"]
 
-[ext_resource type="Script" path="res://source/user_interfaces/main_menu.gd" id="1_gtyd3"]
-[ext_resource type="Script" path="res://source/user_interfaces/title_screen_menu.gd" id="2_ckckt"]
-[ext_resource type="Script" path="res://source/user_interfaces/multiplayer_menu.gd" id="3_rishr"]
+[ext_resource type="Script" path="res://source/user_interfaces/main_menu/main_menu.gd" id="1_gtyd3"]
+[ext_resource type="Script" path="res://source/user_interfaces/main_menu/title_screen_menu.gd" id="2_ckckt"]
+[ext_resource type="Script" path="res://source/user_interfaces/main_menu/multiplayer_menu.gd" id="3_rishr"]
 
 [sub_resource type="Theme" id="Theme_rdiub"]
 

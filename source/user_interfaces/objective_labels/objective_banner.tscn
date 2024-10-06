@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqhwog2xo5ppk"]
+
+[ext_resource type="Texture2D" uid="uid://b8kig072l71fr" path="res://assets/UI/Ribbons/Ribbon_Blue_3Slides.png" id="1_brfw7"]
+[ext_resource type="FontFile" uid="uid://bvhxgca7bviay" path="res://assets/Fonts/OldLondon.ttf" id="2_6srgm"]
+
+[node name="ObjectiveBanner" type="CanvasLayer"]
+
+[node name="RibbonBlue3Slides" type="Sprite2D" parent="."]
+position = Vector2(896, 64)
+texture = ExtResource("1_brfw7")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 857.0
+offset_top = 33.0
+offset_right = 937.0
+offset_bottom = 73.0
+theme_override_fonts/font = ExtResource("2_6srgm")
+theme_override_font_sizes/font_size = 35
+text = "Tree"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://th5a5353c0q0"]
+[gd_scene load_steps=8 format=3 uid="uid://th5a5353c0q0"]
 
 [ext_resource type="Script" path="res://source/player/player.gd" id="1_6x0rl"]
 [ext_resource type="Script" path="res://source/player/input_synchronizer.gd" id="2_8rd8m"]
 [ext_resource type="PackedScene" uid="uid://cwowgatou4rs2" path="res://source/characters/warrior/warrior.tscn" id="2_m5ir0"]
 [ext_resource type="PackedScene" uid="uid://g3us0p5v2s8h" path="res://source/characters/archer/archer.tscn" id="3_akci0"]
+[ext_resource type="PackedScene" uid="uid://dqhwog2xo5ppk" path="res://source/user_interfaces/objective_labels/objective_banner.tscn" id="5_j75fr"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_7qgli"]
 properties/0/path = NodePath(".:player_id")
@@ -21,6 +22,9 @@ properties/3/replication_mode = 2
 properties/4/path = NodePath(".:player_team")
 properties/4/spawn = true
 properties/4/replication_mode = 0
+properties/5/path = NodePath("ObjectiveBanner:visible")
+properties/5/spawn = true
+properties/5/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w3k14"]
 properties/0/path = NodePath("InputSynchronizer:attack")
@@ -54,7 +58,7 @@ properties/9/path = NodePath("InputSynchronizer:switch_character_two")
 properties/9/spawn = true
 properties/9/replication_mode = 2
 
-[node name="Player" type="Node2D" node_paths=PackedStringArray("_camera", "_projectiles_container", "_input_synchronizer", "_spawn_protection_timer")]
+[node name="Player" type="Node2D" node_paths=PackedStringArray("_camera", "_projectiles_container", "_input_synchronizer", "_spawn_protection_timer", "_objective_banner", "_objective_banner_timer")]
 y_sort_enabled = true
 script = ExtResource("1_6x0rl")
 _camera = NodePath("Camera2D")
@@ -65,6 +69,8 @@ _player_bodies = {
 "WARRIOR": NodePath("PlayerBodyContainer/Warrior")
 }
 _spawn_protection_timer = NodePath("SpawnProtectionTimer")
+_objective_banner = NodePath("ObjectiveBanner")
+_objective_banner_timer = NodePath("ObjectiveBannerTimer")
 player_name = "John"
 
 [node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -96,3 +102,10 @@ spawn_limit = 100
 
 [node name="SpawnProtectionTimer" type="Timer" parent="."]
 wait_time = 2.0
+
+[node name="ObjectiveBanner" parent="." instance=ExtResource("5_j75fr")]
+
+[node name="ObjectiveBannerTimer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+autostart = true

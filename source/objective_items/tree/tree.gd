@@ -4,13 +4,14 @@ extends Node2D
 @export var _animation_player: AnimationPlayer
 @export var _tree_area: Area2D
 
-@export var health := 100
+@export var health := 200
 
-var is_hit: = false
+var is_hit := false
+var team_points: Array[int] = [0, 0]
+var game_over := false
 
 
 func _ready() -> void:
-	print(is_multiplayer_authority())
 	if not is_multiplayer_authority():
 		return
 
@@ -35,6 +36,9 @@ func hit():
 		is_hit = true
 		health -= 1
 
+	if health <= 0:
+		print(team_points)
+
 
 func _on_animation_finished(animation_name: String):
 	if animation_name == "hit":
@@ -50,5 +54,7 @@ func _on_objective_area_hit(attacker_player_id: int, is_projectile: bool):
 
 	if is_projectile:
 		return
+
+	team_points[attacker.player_team] += 1
 
 	hit()
