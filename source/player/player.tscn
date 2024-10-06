@@ -106,6 +106,6 @@ wait_time = 2.0
 [node name="ObjectiveBanner" parent="." instance=ExtResource("5_j75fr")]
 
 [node name="ObjectiveBannerTimer" type="Timer" parent="."]
-wait_time = 4.0
+wait_time = 8.0
 one_shot = true
 autostart = true

@@ -13,13 +13,14 @@ _players = NodePath("Players")
 _player_spawn_points = [NodePath("SpawnPoint1"), NodePath("SpawnPoint2")]
 
 [node name="Map" parent="." instance=ExtResource("3_xp6ot")]
+z_index = -1
 position = Vector2(2432, 2304)
 
 [node name="SpawnPoint1" type="Node2D" parent="."]
-position = Vector2(2880, 2496)
+position = Vector2(2496, 2560)
 
 [node name="SpawnPoint2" type="Node2D" parent="."]
-position = Vector2(4096, 2496)
+position = Vector2(4480, 2560)
 
 [node name="Players" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -30,7 +31,7 @@ spawn_path = NodePath("../Players")
 spawn_limit = 30
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(3488, 2880)
+position = Vector2(3488, 1824)
 
 [node name="Tree" parent="." instance=ExtResource("4_l7sth")]
-position = Vector2(3488, 2912)
+position = Vector2(3488, 1824)
